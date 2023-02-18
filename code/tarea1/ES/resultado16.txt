@@ -1,0 +1,9 @@
+#######ESFERA########
+Minimo Esfera - 0.06515643098844981
+Tiempo - 39.8475558757782 segundos
+#######ACKLEY########
+Minimo ACKLEY - 0.09068716125469933
+Tiempo - 390.71750712394714 segundos
+#######ROSENBROCK########
+Minimo ROSENBROCK - 0.06776891081880154
+Tiempo - 311.6322524547577 segundos

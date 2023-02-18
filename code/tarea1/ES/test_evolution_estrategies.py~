@@ -1,0 +1,36 @@
+import numpy as np
+import sys
+import EstrategiasEvolutivas as es
+
+def sphere(x):
+    return np.sum(x**2)
+
+def ackley(x):
+    first_sum = np.sum(x**2)
+    second_sum = np.sum(np.cos(2*np.pi*x))
+    n = x.shape[0]
+    return -20*np.exp(-0.2*np.sqrt(first_sum/n)) - np.exp(second_sum/n) + 20 + np.e
+
+def rosenbrock(x):
+    return np.sum(100.0*(x[1:] - x[:-1]**2.0)**2.0 + (1-x[:-1])**2.0)
+
+max_iteraciones = 1000
+dimension = 10
+funciones_objetivo = [sphere, ackley, rosenbrock]
+semilla = sys.argv[1]
+
+for func_obj in funciones_objetivo:
+    
+    if func_obj.__name__ == 'sphere':
+        limite_superior =  5.12
+        limite_inferior = -5.12
+    elif func_obj.__name__ == 'ackley':
+        limite_superior =  32.768
+        limite_inferior = -32.768
+    elif func_obj.__name__ == 'rosenbrock':
+        limite_superior =  2.048
+        limite_inferior = -2.048
+
+    x0 = np.random.uniform(limite_inferior,limite_superior,(dimension,))
+    best_solution = es.EvolutionStrategyPlus(mu=10, sigma=0.1, objective_func=func_obj, n_iterations=max_iteraciones,semilla=semilla)
+    print(min(best_solution.run(x0)))
