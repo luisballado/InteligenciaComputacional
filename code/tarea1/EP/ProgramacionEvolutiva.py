@@ -26,24 +26,27 @@ class EvolutionProgramming(object):
             poblacion.append(individuo)
         return poblacion
 
+    #parte del algoritmo
     def evolucionar(self,poblacion):
         if self.semilla != None:
             random.seed(self.semilla)
+        
         for i in range(self.max_iter):
             nueva_poblacion = []
-                
-        for individual in poblacion:
-            torneo = random.sample(poblacion,self.num_torneos)
-            winner = min(torneo,key=self.funcion) #conocer el mejor
-            #ajustar desviacion con regla de 1/5
-            sigma = self.mutation_rate * (self.maximo-(self.minimo)) / 5
-            mutante = individual + np.random.normal(0,sigma,self.dimension)
-                        
-            if self.funcion(mutante) < self.funcion(winner):
-                nueva_poblacion.append(mutante)
-            else:
-                nueva_poblacion.append(winner)
             
-        poblacion = nueva_poblacion
-        return min(poblacion, key=self.funcion)
+            for individual in poblacion:
+                #elegir respecto al num de torneos al azar
+                torneo = random.sample(poblacion,self.num_torneos)
+                winner = min(torneo,key=self.funcion) #conocer el minimo
+                #ajustar desviacion con regla de 1/5
+                sigma = self.mutation_rate * (self.maximo-(self.minimo)) / 5
+                mutante = individual + np.random.normal(0,sigma,self.dimension)
+                
+                if self.funcion(mutante) < self.funcion(winner):
+                    nueva_poblacion.append(mutante)
+                else:
+                    nueva_poblacion.append(winner)
+            
+            poblacion = nueva_poblacion
+        return min(poblacion, key=self.funcion) #regresar el minimo de la evaluacion de la poblacion
 

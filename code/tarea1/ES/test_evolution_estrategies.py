@@ -55,25 +55,22 @@ for func_obj in funciones_objetivo:
 
     evaluar = EvolutionStrategyPlus(mu=10, sigma=0.1, objective_func=func_obj, n_iterations=max_iteraciones,semilla=semilla,tam_poblacion=tam_poblacion,dimension=dimension,minimo=limite_inferior,maximo=limite_superior)
     
-    x0 = np.random.uniform(limite_inferior,limite_superior,dimension)
-
+    #x0 = np.random.uniform(limite_inferior,limite_superior,dimension)
+        
     start_time = time.time()
-    results = evaluar.run(x0)
+    results = evaluar.run()
     
     if func_obj.__name__ == 'sphere':
         print("#######ESFERA########")
-        #print(results)
         print("Minimo Esfera - %s" % min(n for n in results if n>0))
         print("Tiempo - %s segundos" % (time.time()-start_time))
     
     elif func_obj.__name__ == 'ackley':
         print("#######ACKLEY########")
-        #print(results)
         print("Minimo - %s" % min(n for n in results if n>0))
         print("Tiempo - %s segundos" % (time.time()-start_time))
 
     elif func_obj.__name__ == 'rosenbrock':
         print("#######ROSENBROCK########")
-        #print(results)
         print("Minimo ROSENBROCK - %s" % min(n for n in results if n>0))
         print("Tiempo - %s segundos" % (time.time()-start_time))

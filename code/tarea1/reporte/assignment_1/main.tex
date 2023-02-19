@@ -66,10 +66,12 @@
 \item Clonar el repositorio
   
 \begin{commandline}
-	\begin{verbatim}
-		$ git clone https://
-		$ cd IC
-	\end{verbatim}
+ \begin{verbatim}
+  $ git clone https://github.com/luisballado/InteligenciaComputacional.git
+  $ cd InteligenciaComputacional
+  $ cd code
+  $ cd tarea1
+ \end{verbatim}
 \end{commandline}
 
 \newpage
@@ -78,27 +80,29 @@
   Dentro del repositorio se sigue la siguiente estructura para organizar los archivos por paradigma genetico como se muestra:\\
   
   \dirtree{%
-    .1 tarea/.
+    .1 tarea1/.
     .2 DE.
     .3 EvolucionDiferencial.py.
+    .3 test\_differential\_evolution.py.
     .3 resultados.
     .4 resultado\_graficos.py.
     .4 resultados\_globales.py.
     .4 resultados.py.
     .4 resultados.txt.
-    .3 testdifferentialevolution.py.
     .2 EP.
-    .3 ackley.
-    .4 resultado\_global.txt.
-    .3 EP\_sphere.py.
+    .3 ProgramacionEvolutiva.py.
+    .3 test\_evolution\_programming.py.
     .3 resultado\_graficos.py.
     .3 resultados.py.
     .3 rosen\_results/.
     .4 resultado\_global.txt.
     .3 sphere\_results/.
     .4 resultado\_global.txt.
+    .3 ackley.
+    .4 resultado\_global.txt.
     .2 ES.
-    .3 ES\_another.py.
+    .3 EstrategiasEvolutivas.py.
+    .3 test\_evolution\_estrategies.py.
     .3 resultado\_ackley.txt.
     .3 resultado\_esfera.txt.
     .3 resultado\_graficos.py.
@@ -114,7 +118,6 @@
 \newpage
 \section{Programación Evolutiva}
 \subsection{Pseudocódigo}
-
 \begin{algorithm} \caption{Pseudocódigo Programación Evolutiva}
   \begin{algorithmic}[1]
     \State Inicializar el número de generaciones a 0 $(t=0)$
@@ -151,27 +154,26 @@ La regla 1/5 se utiliza para adaptar las tasas de mutación y perturbación en r
 
 \begin{enumerate} 
 \item Ejecutar Programacion Evolutiva
-  \href{https://github.com/luisballado/ADA/blob/main/practice_code/tarea1.cpp}{ver código en github}\\
+  \href{https://github.com/luisballado/InteligenciaComputacional/tree/master/code/tarea1/EP}{ver código en github}\\
   \begin{enumerate}
-  \item entrar a la carpeta EP \\
-  \item correr el programa test\_differential\_evolution.py y mandar la salida a resultado.txt\\
+  \item entrar a la carpeta EP
+  \item correr el programa test\_evolution\_programming.py 100000 21 1234 10 4
   \end{enumerate} 
   
-  Los siguientes comando hacen lo descrito arriba
+  Los siguientes comando hacen lo descrito arriba, donde se le pasa como argumentos: max_iteraciones, num_poblacion, semilla, dimension, num_torneos
   
   \begin{commandline}
      \begin{verbatim}
-       $ cd EP       
-       $ python3.10 test\_differential\_evolution.py > resultado.txt\\
+    $ cd EP       
+    $ python3.10 test_evolution_programming.py 100000 21 1234 10 4
      \end{verbatim}
   \end{commandline}
   
   Ejemplo de resultados:
-
+  
   \begin{commandline}
      \begin{verbatim}
-       $ cd EP       
-       $ python3.10 test\_differential\_evolution.py > resultado.txt\\
+       $ python3.10 test_evolution_programming.py 100000 21 1234 10 4
      \end{verbatim}
   \end{commandline}
   
@@ -216,11 +218,11 @@ La regla 1/5 se utiliza para adaptar las tasas de mutación y perturbación en r
 En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es el tamaño de la población de descendencia, sigma es la desviación estándar de la distribución normal y $\mu$ es la tasa de mutación. La selección de padres se realiza seleccionando los mejores $\mu$ individuos para las estrategias de coma y seleccionando aleatoriamente $\lambda$ individuos para las estrategias de suma. La regla 1/5 se utiliza para adaptar las tasas de mutación y perturbación de manera similar a la Programación Evolutiva.
 
 \begin{enumerate} 
-\item Ejecutar Programación Evolutiva
-  \href{https://github.com/luisballado/ADA/blob/main/practice_code/tarea1.cpp}{ver código en github}\\
+\item Ejecutar Estrategias Evolutivas
+  \href{https://github.com/luisballado/InteligenciaComputacional/tree/master/code/tarea1/ES}{ver código en github}\\
   \begin{enumerate}
   \item entrar a la carpeta ES \\
-  \item correr el programa test\_differential\_evolution.py y mandar la salida a resultado.txt\\
+  \item correr el programa test\_evolution\_estrategies.py\\
   \end{enumerate} 
   
   Los siguientes comando hacen lo descrito arriba
@@ -228,7 +230,7 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
   \begin{commandline}
      \begin{verbatim}
         $ cd ES
-        $ python3.10 test\_differential\_evolution.py > resultado.txt\\
+        $ python3.10 test_evolution_estrategies.py
      \end{verbatim}
   \end{commandline}
 
@@ -236,8 +238,8 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
   % Command-line "screenshot"
   \begin{commandline}
 	\begin{verbatim}
-	  $ g++ -o ./tarea1 ./tarea1.cpp
-	  $ ./tarea1
+	  $ python3.10 test_evolution_estrategies.py
+	  $ 
 	\end{verbatim}
   \end{commandline}
 \end{enumerate}
@@ -255,7 +257,7 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
     \State Inicializar la población P, con el tam\_población
     \State Evaluar el fitness de cada individuo de la Población P
     \Repeat
-    $t=t+1$
+    \State $t=t+1$
     \ForEach {$individuo \in \mathcal P $}
     \State Seleccionar tres diferentes indivuduos de P que sean diferentes: $r1\neq X2 \neq X3 \in P$
     \ForEach {$j-th$ gene $\in individuo $}
@@ -278,18 +280,18 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
 
 \begin{enumerate}
   \item Ejecutar Evolución Diferencial
-    \href{https://github.com/luisballado/ADA/blob/main/practice_code/tarea1.cpp}{ver código en github}\\
+    \href{https://github.com/luisballado/InteligenciaComputacional/tree/master/code/tarea1/DE}{ver código en github}\\
     \begin{enumerate}
     \item entrar a la carpeta DE \\
-    \item correr el programa test\_differential\_evolution.py y mandar la salida a resultado.txt\\
+    \item correr el programa test\_differential\_evolution.py\\
     \end{enumerate} 
 
-    Los siguientes comando hacen lo descrito arriba
+    Los siguientes comandos hacen lo descrito arriba
     
     \begin{commandline}
         \begin{verbatim}
           $ cd DE
-          $ python3.10 t        est\_differential\_evolution.py > resultado.txt\\
+          $ python3.10 test_differential_evolution.py
         \end{verbatim}
     \end{commandline}
 
@@ -297,8 +299,8 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
 
     \begin{commandline}
         \begin{verbatim}
-          $ cd DE
-          $ python3.10 test\_differential\_evolution.py > resultado.txt\\
+          $ python3.10 test_differential_evolution.py
+          $
         \end{verbatim}
     \end{commandline}
 \end{enumerate} 

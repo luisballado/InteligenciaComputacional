@@ -61,10 +61,7 @@ class DifferentialEvolution(object):
 
                 #se calcula el vector mutado con la ecuacion
                 self.mutanteV.solucion = self.poblacion[r1].solution + self.F * (self.poblacion[r2].solution - self.poblacion[r3].solution)
-                #print('antes del cruce ', self.poblacion[index].value, ' ', self.poblacion[index].solution)
-                #print('antes del mutante ', self.mutanteV.value, ' ', self.mutanteV.solution)
-                #print('antes del trial ', self.trialV[index].value,' ',self.trialV[index].solution)
-
+                
                 J_r = random.randrange(self.dimension)
                 
                 #crear un vector de prueba - para evitar estancamientos
@@ -75,18 +72,12 @@ class DifferentialEvolution(object):
                         #print("individuo ",index, 'cae aqui en el mutado para el parametro')
                         #se toma del vector mutado esa dimension
                         self.trialV[index].solution[j] = copy.deepcopy(self.mutanteV.solution[j])
-                        #time.sleep(1)
-                        #print('despues de cambiar un parametro',self.poblacion[index].solution)
-                        #print('despues de cambiar un parametro trial',self.trialV[index].solution)
                     else:
                         #si no se toma del original
-                        #print('particula ',index,' cae aqui para el parametro',j)
                         self.trialV[index].solution[j] = self.poblacion[index].solution[j]
 
                 #print("despues del cruce")
-                #print("despues del cruce ", self.poblacion[index].value,' ',self.poblacion[index].solution)
-                #print("despues del mutante ", self.mutantV.value, ' ', self.mutantV.solution)
-                #print("despues del trial ", self.trialV[index].value, ' ', self.trialV[index].solution)
+                
                 self.trialV[index].value = self.funcion(self.trialV[index].solution)
                 self.poblacion[index].value = self.funcion(self.poblacion[index].solution)
                 
