@@ -49,15 +49,18 @@
 
 \begin{info} % Information block
   Se adjunta la liga al repositorio, donde se encuentran todos los códigos\\
+  \href{https://github.com/luisballado/InteligenciaComputacional/tree/master/code/tarea1}{ver código en github}\\
 \end{info}
 
 \begin{info} % Information block
   Se hacen uso de las siguientes bibliotecas de Python
   \begin{itemize}
-  \item numpy
-  \item matplotlib
-  \item pandas
-  \item scipy
+  \item numpy  - manejo de vectores, cálculos vectoriales, normalizar, aleatoriedad
+  \item random - aleatoriedad
+  \item abc - creación de clases abstractas
+  \item matplotlib - generación de gráficos mostrados en las estadisticas
+  \item pandas - para los programas de resultados y calculos de media, desviación std.
+  \item scipy - para los programas de resultados y calculos de media, desviación std. 
   \end{itemize}
 \end{info}
 
@@ -117,6 +120,7 @@
 
 \newpage
 \section{Programación Evolutiva}
+
 \subsection{Pseudocódigo}
 \begin{algorithm} \caption{Pseudocódigo Programación Evolutiva}
   \begin{algorithmic}[1]
@@ -160,7 +164,7 @@ La regla 1/5 se utiliza para adaptar las tasas de mutación y perturbación en r
   \item correr el programa test\_evolution\_programming.py 100000 21 1234 10 4
   \end{enumerate} 
   
-  Los siguientes comando hacen lo descrito arriba, donde se le pasa como argumentos: max_iteraciones, num_poblacion, semilla, dimension, num_torneos
+  Los siguientes comando hacen lo descrito arriba, donde se le pasa como argumentos: max\_iteraciones, num\_poblacion, semilla, dimension, num\_torneos
   
   \begin{commandline}
      \begin{verbatim}
@@ -174,6 +178,16 @@ La regla 1/5 se utiliza para adaptar las tasas de mutación y perturbación en r
   \begin{commandline}
      \begin{verbatim}
        $ python3.10 test_evolution_programming.py 100000 21 1234 10 4
+       #######ESFERA########
+       Minimo Esfera - 0.002827846527436945
+       Tiempo - 1.0355191230773926 segundos
+       #######ACKLEY########
+       Minimo - 6.921701528961158
+       Tiempo - 2.3101282119750977 segundos
+       #######ROSENBROCK########
+       Minimo ROSENBROCK - 0.011268231197750245
+       Tiempo - 1.9178040027618408 segundos
+
      \end{verbatim}
   \end{commandline}
   
@@ -224,23 +238,32 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
   \item entrar a la carpeta ES \\
   \item correr el programa test\_evolution\_estrategies.py\\
   \end{enumerate} 
-  
-  Los siguientes comando hacen lo descrito arriba
+
+  Los siguientes comando hacen lo descrito arriba, donde se le pasa como argumentos: max\_iteraciones, dimension, semilla, tam\_poblacion
 
   \begin{commandline}
      \begin{verbatim}
         $ cd ES
-        $ python3.10 test_evolution_estrategies.py
+        $ python3.10 test_evolution_estrategies.py 1000 10 123 21
      \end{verbatim}
   \end{commandline}
 
   Ejemplo de resultados:
   % Command-line "screenshot"
   \begin{commandline}
-	\begin{verbatim}
-	  $ python3.10 test_evolution_estrategies.py
-	  $ 
-	\end{verbatim}
+\begin{verbatim}
+  $ python3.10 test_evolution_estrategies.py 1000 10 123 21
+  #######ESFERA########
+  Minimo Esfera - 0.0030510694905647798
+  Tiempo - 9.76209020614624 segundos
+  #######ACKLEY########
+  Minimo - 2.9760964277078257
+  Tiempo - 22.16294836997986 segundos
+  #######ROSENBROCK########
+  Minimo ROSENBROCK - 0.5528162673457115
+  Tiempo - 18.074426412582397 segundos
+  
+\end{verbatim}
   \end{commandline}
 \end{enumerate}
 
@@ -286,36 +309,58 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
     \item correr el programa test\_differential\_evolution.py\\
     \end{enumerate} 
 
-    Los siguientes comandos hacen lo descrito arriba
+    Los siguientes comando hacen lo descrito arriba, donde se le pasa como argumentos: max\_iteraciones, tam\_poblacion, semilla, dimension
     
     \begin{commandline}
-        \begin{verbatim}
-          $ cd DE
-          $ python3.10 test_differential_evolution.py
-        \end{verbatim}
+\begin{verbatim}
+  $ cd DE
+  $ python3.10 test_differential_evolution.py 1000 21 1234 10 0.7 0.8
+\end{verbatim}
     \end{commandline}
 
     Ejemplo de resultados:
 
     \begin{commandline}
-        \begin{verbatim}
-          $ python3.10 test_differential_evolution.py
-          $
-        \end{verbatim}
+\begin{verbatim}
+  $ python3.10 test_differential_evolution.py 1000 21 1234 10 0.7 0.8
+  #######ESFERA########
+  Minimo Esfera - 0.32934544659126797
+  Tiempo - 0.9660787582397461 segundos
+  #######ACKLEY########
+  Minimo - 5.653204234520572
+  Tiempo - 1.2940564155578613 segundos
+  #######ROSENBROCK########
+  Minimo ROSENBROCK - 0.27512093701771834
+  Tiempo - 1.1127583980560303 segundos
+\end{verbatim}
     \end{commandline}
 \end{enumerate} 
 
-\newpage
-\section{Desiciones de implementación}
-\begin{warn}[MEJOR CASO:]
-  encontrar todos los elementos del primer arreglo en el segundo arreglo de forma secuencial, sin el análisis de numeros que pertenezcan al primer arreglo ya que estarían ordenados $O(n)$
-\end{warn}
-\begin{warn}[PEOR CASO:]
-  analizar todas las posibilidades y no encontrar similitudes $O(n^{2})$
-\end{warn}
+\section{Decisiones de implementación}
 
+El código hace uso de NumPy arrays en su mayoria para representar vectores y matrices que son el tipo de estructura de datos convenientes para los calculos y fácil manipulación que nos brinda la libreria.\\
+
+Todos los paradigmas los englobe en clases para tener un mejor control de ellas y poder iterar en la evaluación de sus diferentes funciones objetivo.\\
+
+Se usan diferentes tipos de variables que python internamente interpretará como de tipo entero o flotante como las empleadas para el número de iteraciones, tamaño de poblacion, dimesiónes del problema, limites máx-min, objetos de tipo funciones para pasarlas a las clases
+
+Los módulos de random son también usados para crear números random para la generaciones de poblaciones.\\
+
+En teoría, es posible implementar los algoritmos de programación evolutiva, estrategias evolutivas y evolución diferencial utilizando la recursión, pero generalmente no se hace ya que en generaciones grandes se puede llegar al limite y desbordar el stack. Las implementaciones utilizan estructuras de bucles iterativos para mejorar la eficiencia y la claridad del código. 
 \newpage
 \section{Estadisticas}
+\includegraphics[scale=0.3]{ackley.png}
+\includegraphics[scale=0.3]{rosen.png}
+\includegraphics[scale=0.3]{sphere.png}
+
+Se crearon dos programas para la generación de los gráficos y los cálculos estadísticos con ayuda de las librerias matplotlib.\\
+Los archivos se encuentran en las respectivas carpetas para cada paradigma genético
+
+\begin{itemize}
+\item resultado\_graficos.py
+\item resultados.py
+\end{itemize}
+
 \subsection{Evolución Diferencial}
 \begin{table}[H]
   \centering
@@ -331,6 +376,7 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
 \includegraphics[scale=0.5]{DE/ackley.png}
 \includegraphics[scale=0.5]{DE/esfera.png}
 \includegraphics[scale=0.5]{DE/rosenbrock.png}
+
 
 \newpage
 \subsection{Programación Evolutiva}
@@ -367,9 +413,13 @@ En este algoritmo, $\mu$ es el tamaño de la población de padres, $\lambda$ es 
 \includegraphics[scale=0.5]{ES/rosenbrock.png}
 
 
-
 \section{Conclusiones}
 
+Durante las corridas se observaron las diferentes soluciones ya que el proceso de optimización es estocástico, lo que involucra aleatoriedad lo que hace que los diferentes algoritmos encuentren diferentes soluciones para cada corrida y es posible que para multiples soluciones sean igual de buenas (que tengan el mismo valor minimo).\\
+
+La elección de cuál algoritmo es mejor de usar para una función objetivo en particular, depende de varios factores como la estructura del problema. Al incio me fué complicado entender como podría crear las funciones objetivos y que es lo que se buscaba realmente, pero mientras más me adentraba al tema pude entender que al final del dia es una función limitada en un rango donde existe un mínimo o un máximo global y en ocasiones solo encontramos los mínimos locales y es importando tener un cambio de factor de mutación para poder ir saliendo de estos mínimos e ir buscando los globales.\\
+
+No hay un mejor o peor algoritmo, todos tienen sus fortalezas y debilidades, Programacion Evolutiva (EP), Estrategias Evolutivas (ES) y Evolución Diferencial (DE) todos son metahuristicas de optimización que pertenecen a la familia de técnicas de Computación Evolutiva\\
 
 \end{document}
 
