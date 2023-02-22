@@ -1,0 +1,25 @@
+aprendizaje por refuerzo y no supervisado
+
+
+https://medium.com/aprendizaje-por-refuerzo-introducci%C3%B3n-al-mundo-del/aprendizaje-por-refuerzo-introducci%C3%B3n-al-mundo-del-rl-1fcfbaa1c87
+
+https://www.aprendemachinelearning.com/aprendizaje-por-refuerzo/
+
+https://www.aprendemachinelearning.com/aplicaciones-del-machine-learning/#no_supervisado
+
+https://algoritmia8.com/2020/09/15/como-aprenden-los-algoritmos-aprendizaje-supervisado-no-supervisado-y-por-refuerzo/
+
+https://es.wikipedia.org/wiki/Aprendizaje_por_refuerzo
+
+https://www.iic.uam.es/inteligencia-artificial/aprendizaje-por-refuerzo/
+
+https://www.xataka.com/inteligencia-artificial/conceptos-inteligencia-artificial-que-aprendizaje-refuerzo
+
+https://www.kabel.es/aprendizaje-refuerzos/
+
+https://medium.com/soldai/tipos-de-aprendizaje-autom%C3%A1tico-6413e3c615e2
+
+https://medium.com/aprendizaje-por-refuerzo/1-introducci%C3%B3n-al-aprendizaje-por-refuerzo-92c9239aed90
+
+libro:
+https://cours.etsmtl.ca/sys843/REFS/Books/ebook_Haykin09.pdf
