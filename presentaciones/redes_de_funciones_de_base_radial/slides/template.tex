@@ -100,6 +100,7 @@
 %\usepackage{mathptmx} % Use the Times font for serif text
 \usepackage{palatino} % Use the Palatino font for serif text
 
+\usepackage[ruled,vlined]{algorithm2e}
 %\usepackage{helvet} % Use the Helvetica font for sans serif text
 \usepackage[default]{opensans} % Use the Open Sans font for sans serif text
 %\usepackage[default]{FiraSans} % Use the Fira Sans font for sans serif text
@@ -188,12 +189,14 @@
 \begin{frame}
   \frametitle{Introducción}
 
+  \bigskip % Vertical whitespace
+  
   Las redes neuronales de base radial están compuestas de tres capas: \textbf{capa de etrada, capa intermedia ó oculta}, en donde la función de activación de sus neuronas es Gaussiana, y \textbf{la capa de salida} con función de activación lineal (Perceptrón)
 
   \bigskip % Vertical whitespace
   
   \begin{figure}
-    \includegraphics[width=0.8\linewidth]{architecture_simple2.png}
+    \includegraphics[width=0.6\linewidth]{architecture_simple2.png}
   \end{figure}
   
 \end{frame}
@@ -201,17 +204,21 @@
 \begin{frame}
   \frametitle{Introducción}
 
-  Las funciones $\phi$ determinan las activaciones de las neuronas de la capa oculta en función de un muestra m.\\
+  Las funciones $\phi$ determinan las activaciones de las neuronas de la capa oculta en función de un muestra m.
 
+  \bigskip % Vertical whitespace
+  
   \textbf{Activación de las neuronas $\phi$}\\
 
-  Utilizando una $\phi$ Gaussiana la activación de las nueronas ocultas sería: $\phi = e^{\frac{x-c}{2n}}$
+  Utilizando una $\phi$ Gaussiana la activación de las nueronas ocultas sería: $\phi = e^{\frac{-\sum_{i=1} ^{p} (x_{i}-c_{ij})^{2}}{2\sigma^{2}_{j}}}$
 
+  \bigskip % Vertical whitespace
+  
   \begin{itemize}
   \item p: Total de características
   \item C: Centroide perteneciente a la neurona oculta j
-  \item $x$ : Distancia euclidiana del vector de entrada y el centroide $C_{j}$
-  \item Varianza
+  \item $\sum_{i=1} ^{p} (x_{i}(n)-c_{ij})^{2}$ : Distancia euclidiana del vector de entrada y el centroide $C_{j}$
+  \item $\sigma^{2}$ Varianza
   \end{itemize}
 \end{frame}
 
@@ -220,7 +227,7 @@
   \textbf{Salida de la red RBF (y)}
   \bigskip % Vertical whitespace
   \begin{center}
-    $y = W_{i} * \phi_{i} - \Theta $
+    $y = \sum_{i=1} ^{n} W_{i} * \phi_{i} - \theta $
   \end{center}
   \bigskip % Vertical whitespace
   Donde:
@@ -228,44 +235,51 @@
   \item n: neuronas en la capa oculta
   \item m: patrón de entrada (seudomuestra)
   \item $W_{i}$: pesos sinápticos que conectan las neuronas de la capa oculta y la neurona de salida y
-  \item $\Theta$: Umbral de la neurona de salida
-  \item $\Phi_{j}$: Seudomuestra
+  \item $\theta$: Umbral de la neurona de salida
+  \item $\phi_{i}$: Seudomuestra
   \end{itemize}
   
 \end{frame}
 
 
 \begin{frame}
-  En resumen:
+  En resumen:\\
   Para implementar una red RBF necesitamos:
   \bigskip % Vertical whitespace
-  \begin{itemize}
-  \item Un conjunto de muestras $\implies$ X (solo para la etapa de aprendizaje)
-  \item Los centroides $\implies$ C
-  \item El valor de la variaza $\implies$ $\sigma$
-  \item Las pseudomuestras $\implies$ Z
-  \item El valor de los pesos sinápticos $\implies$ w
-  \end{itemize}
+  \begin{enumerate}
+  \item Un conjunto de muestras $\rightarrow$ X (sólo para la etapa de aprendizaje)
+  \item Los centroides $\rightarrow$ C
+  \item El valor de la variaza $\rightarrow$ $\sigma$
+  \item Las pseudomuestras $\rightarrow$ Z
+  \item El valor de los pesos sinápticos $\rightarrow$ w
+  \end{enumerate}
 \end{frame}
 
 \section{Paradigmas de Aprendizaje}
+
 \begin{frame}
+  
   \frametitle{El proceso de aprendizaje de la red RBF}
   Este proceso se suele llamar híbrido ya que se divide en dos fases:\\
-
-  \begin{itemize}
-  \item Fase no supervisada\\
-    Se encarga de obtener el valor de los centroides C y la varianza $\Sigma$. Para esto se suele utilizar el método \textbf{k-means}
-  \item Fase supervisada\\
-    Consiste en calcular los pesos w y umbral $\theta$ de las neuronas de la capa de salida. Para esto se suele utilizar el método de la \textbf{regla delta} o bien el método de la \textbf{matriz pseudoinversa}
-  \end{itemize}
   \bigskip % Vertical whitespace
+  \begin{itemize}
+  \item \textbf{Fase no supervisada}\\
+    Se encarga de obtener el valor de los centroides C y la varianza $\sigma$. \\
+    Para esto se suele utilizar el método \textbf{k-means}
+  \item \textbf{Fase supervisada}\\
+    Consiste en calcular los pesos w y umbral $\theta$ de las neuronas de la capa de salida. Para esto se suele utilizar el método de la \textbf{Regla Delta} o bien el método de la \textbf{matriz seudoinversa}
+  \end{itemize}
+\end{frame}
+
+\section{El proceso de aprendizaje de la red RBF}
+
+\begin{frame}
   Terminología:
   \begin{itemize}
   \item m: Cantidad total de muestras
-  \item X: Conjunto de muestras para entrenamiento $\implies$ {$X_{0}$,$X_{1}$,$X_{2}$,...,$X_{m}$}
-  \item Z: Conjunto de pseudomuestras $\implies$ {$Z_{0}$,$Z_{1}$,$Z_{2}$,..,$Z_{m}$}
-  \item $\Phi$: Salida de una neurona en la capa de salida
+  \item X: Conjunto de muestras para el \\entrenamiento $\rightarrow$ $\{X_{0}$,$X_{1}$,$X_{2}$,...,$X_{m}\}$
+  \item Z: Conjunto de seudomuestras $\rightarrow$ $\{Z_{0}$,$Z_{1}$,$Z_{2}$,..,$Z_{m}\}$
+  \item $\phi$: Salida de una neurona en la capa oculta
   \item y: Salida de una neurona en la capa de salida
   \item w: Pesos sinápticos que enlazan la información de las neuronas de la capa oculta con las de la capa de salida.
   \end{itemize}
@@ -274,7 +288,7 @@
 \begin{frame}
   \frametitle{Fase no supervisada}
 
-  \textbf{Clasificador k-means}\\
+  \textbf{Clasificador k-means}, ejemplo\\
   Estableciendo 2 centroides o bien dos neuronas en la capa oculta $\phi_{1}$, $\phi_{2}$:
 
   \begin{figure}
@@ -286,30 +300,32 @@
 \begin{frame}
   \frametitle{Obtener pseudomuestras}
 
-  Una vez obtenidos los valores de centroides y varianza:\\
+  Una vez obtenidos los valores de centroides y varianza:
 
+  \bigskip % Vertical whitespace
+  
   Generar pseudomuestras\\
   \begin{itemize}
   \item Obtener el conjunto de muestras X
   \item Generar la salida de las neuronas en la capa oculta por cada muestra del conjunto X
-    \[\Phi_{j}=e^{\frac{x}{y}}\]
+    \[\phi_{j}=e^{\frac{-\sum_{i=1} ^{p} (x_{i}-c_{ij})^{2}}{2\sigma^{2}_{j}}}\]
 
-  \item $z_{i}$: Pseudomuestra $\implies$
-    $ \begin{bmatrix}
-    phi \\
-    phi 
-  \end{bmatrix}  $
-  \item Z: Pseudomuestras $\implies$ {$Z_{0}$,$Z_{1}$,$Z_{2}$,...,$Z_{m}$}
+  \item $z_{i}$: Seudomuestra $\rightarrow$
+    $ \begin{pmatrix}
+    \phi_{1} \\
+    \phi_{2} 
+  \end{pmatrix}  $
+  \item Z: Seudomuestras $\rightarrow$ $\{Z_{0}$,$Z_{1}$,$Z_{2}$,...,$Z_{m}\}$
   \end{itemize}
 \end{frame}
 
 \begin{frame}
   \frametitle{Método por Matriz pseudoinversa}
   Debido a que la salida de la red depende linealmente de los pesos, es posible proporcionar una solución directa con lo siguiente:
-  \[ w = G^{+} * S \implies (G^{t}*G)^{-1} * G^{t} * S\]
+  \[ w = G^{+} * S \rightarrow (G^{t}*G)^{-1} * G^{t} * S\]
 
   Donde:\\
-  $(G^{t} * G)^{-1} * G^{t}$, es la matriz pseudoinversa de G.\\
+  $(G^{t} * G)^{-1} * G^{t}$, es la matriz pseudoinversa de G\\
   $G^{t}$, es la matriz transpuesta de G\\
   G, es una matriz de tamaño ($X^{m}$,$n_{oc}$) que contiene las activaciones de las neuronas de la capa oculta pero los patrones de entrada\\
   S, es la matriz de salidas deseadas, de tamaño ($X^m$,$n_{csal}$)
@@ -317,169 +333,369 @@
 \end{frame}
 
 \begin{frame}
-  \frametitle{}
+  \frametitle{Representación}
   El indice superior m indica el número de muestras de aprendizaje
   \begin{figure}
     \includegraphics[width=0.7\linewidth]{rbradial.png}
   \end{figure}
-
-  INCLUIR MATRICES
-
+  $G= \begin{pmatrix}
+    \phi_{1}^{1} \phi_{1}^{2}\\
+    \phi_{2}^{1} \phi_{2}^{2}\\
+    \phi_{m}^{1} \phi_{m}^{2}\\
+  \end{pmatrix}  $,
+  $S= \begin{pmatrix}
+    d_{1}\\
+    d_{2}\\
+    d_{m}\\
+  \end{pmatrix}$,
+  $w=\begin{pmatrix}
+  w_{1}\\
+  w_{2}\\
+  \end{pmatrix}$
 \end{frame}
 
 \begin{frame}
   \frametitle{}
   Suponiendo que se tienen los siguientes valores de G y S:
-  INCLUIR MATRIX
-  Paso 1:
+  \[G= \begin{pmatrix}
+    1 1\\
+    1 2\\
+    1 3\\
+  \end{pmatrix},
+  S = \begin{pmatrix}
+    2\\
+    2\\
+    4\\
+  \end{pmatrix}\]\\
+  \bigskip % Vertical whitespace
+  Paso 1:\\
+  
   Calcular $(G^{t} * G)$
   
   \bigskip % Vertical whitespace
 
-  INCLUIR MATRIX
+  \[P_{1}= \begin{pmatrix}
+    1 1 1\\
+    1 2 3\\
+  \end{pmatrix}
+  \begin{pmatrix}
+    1 1\\
+    1 2\\
+    1 3\\
+  \end{pmatrix} =
+  \begin{pmatrix}
+    3 6\\
+    6 14\\
+  \end{pmatrix}\]
+  
   
 \end{frame}
 
 %------------------------------------------------
-\section{Paradigmas de Aprendizaje}
 \begin{frame}
-  \frametitle{Paradigmas de Aprendizaje}
-  Mecanismos que permiten que podamos procesar toda aquella información nueva que percibimos para acabar transformándola en conocimiento. La mayoria de los algoritmos dentro del ML se pueden clasificar en estos tres grupos.
+  Paso 2:
 
-  \begin{figure}
-    \includegraphics[width=0.6\linewidth]{machine.png}
-  \end{figure}
-  
+  \bigskip % Vertical whitespace
+
+  Calcular la inversa $(G^{t}*G)^{-1} \rightarrow (P_{1}^{-1})$\\
+
+  Utilizado el método de Gauss-Jordan:\\
+
+  $R1*\frac{1}{3} = \begin{pmatrix}
+    1  2 | \frac{1}{3} 0\\
+    6 14 | 0 1\\
+  \end{pmatrix} \rightarrow R2 - 6R1 = \begin{pmatrix}
+    1 2 | \frac{1}{3} 0\\
+    0 2 | -2 1\\
+  \end{pmatrix} \rightarrow R1-R2 = \begin{pmatrix}
+    1 0 | \frac{7}{3} -1\\
+    0 2 | -2 1\\
+  \end{pmatrix} \rightarrow R2 * \frac{1}{2} = \begin{pmatrix}
+    1 0 | \frac{7}{3} -1\\
+    0 1 | -1 \frac{1}{2}\\
+  \end{pmatrix}$\\
+
+  Entonces $(G^{t}*G)^{-1}$ es: \\
+  \[P2 = \begin{pmatrix}
+    \frac{7}{3} (-1)\\
+    (-1) \frac{1}{2}\\
+  \end{pmatrix}\]
 \end{frame}
 %------------------------------------------------
 
 \begin{frame}
-  \frametitle{¿Qué es el aprendizaje?}
+  \frametitle{utilizado el método de determinantes}
 
-  Norbert Wiener en su libro "Dios y el Golem" define aprendizaje como:
+  \[(P_{1})^{-1} = \frac{1}{|P_{1}|}*(P_{1}^{*})^{t}\]
+
+  Si $P_{1} = \begin{pmatrix}
+    3 6\\
+    6 14\\
+  \end{pmatrix}$ Entonces:\\
+  $|P_{1}|= \begin{pmatrix}
+    3 6\\
+    6 14\\
+  \end{pmatrix} \rightarrow 42-36=6$
+  $P_{1}^{*} = \begin{pmatrix}
+    14 -6\\
+    -6  3\\
+  \end{pmatrix} \rightarrow (P_{1}^{*})^{t} = \begin{pmatrix}
+    14 -6\\
+    -6  3\\
+    \end{pmatrix}$
+  $\frac{1}{|P_{1}|}*(P_{1}^{*})^{t} = \frac{\begin{pmatrix} 14 -6\\-6 3\\ \end{pmatrix}}{6} \rightarrow \begin{pmatrix} \frac{7}{3} -1\\
+    -1 \frac{1}{2}\\
+  \end{pmatrix}$ 
+\end{frame}
+
+\begin{frame}
+  Paso 3: Calcular $((G^{t}*G)^{-1}*G^{t}) \rightarrow (P_{2}*G^{t})$:\\
   
-  \begin{definition}
-    Un sistema organizado puede definirse como aquel que transforma un cierto mensaje de entrada en uno de salida, de acuerdo con algún principio de transformación. Si tal principio está sujeto a cierto criterio de validez de funcionamiento, y si el método de transformación se ajusta a fin de que tienda a mejorar el funcionamiento del sistema de acuerdo con ese criterio, se dice que el sistema aprende"
-  \end{definition}
+  \[P_{3} = \begin{pmatrix}
+    \frac{7}{3} -1\\
+    -1  \frac{1}{2}\\
+  \end{pmatrix} * \begin{pmatrix}
+    1 1 1\\
+    1 2 3\\
+  \end{pmatrix} = \begin{pmatrix}
+    \frac{4}{3} \frac{1}{3} \frac{-2}{3}\\
+    \frac{-1}{2} 0 \frac{1}{2}\\
+  \end{pmatrix}\]\\
 
-  \begin{figure}
-    \includegraphics[width=0.4\linewidth]{homo.jpg}
-  \end{figure}
+  Paso 4: Obtener w por medio de $P_{3}*S:$ \\
+
+  \[ w = \begin{pmatrix}
+    \frac{4}{3} \frac{1}{3}  \frac{-2}{3}\\
+    \frac{-1}{2} 0  \frac{1}{2}\\
+  \end{pmatrix} \begin{pmatrix}
+    2\\
+    2\\
+    4\\
+  \end{pmatrix} = \begin{pmatrix}
+    \frac{2}{3}\\
+    3\\
+    1\\
+  \end{pmatrix}
+  \]\\
+
+  Por lo tanto:   \[w = G^{+} * S = \begin{pmatrix}
+    \frac{2}{3}\\
+    1\\
+  \end{pmatrix}\]
+\end{frame}
+
+%------------------------------------------------
+\begin{frame}
+  \frametitle{Aprendizaje de la red RBF, por Regla Delta}
+
+  Paso 1 - Consiste en obtener la salida de la red $(y)$ mediante:\\
+
+  \[ y = \sum_{i=1} ^{n} (w_{i}*\phi_{i}) - \theta\]
+
+  Paso 2 - Consiste en corregir el valor de los pesos w dependiendo del error cometido por la red dada una muestra i:
+  \[e_{i} = (d_{i}-y_{i})\]
+
+  Evaluación: Consiste en evaluar el error global cometido por la red, y en caso de cumplir con un umbral de precisión $\epsilon$ termina el entrenamiento:
+
+  \[e_{medio}=\frac{1}{2}(e_{i})^{2} \quad E=\frac{1}{p} \sum_{k=1} ^{p} e_{medio}\]
   
 \end{frame}
 
-
-\subsection{Aprendizaje supervisado}
 \begin{frame}
-  \frametitle{Aprendizaje supervisado}
+  \frametitle{Regla Delta}
 
-  Surge en enseñarle a estos algoritmos cual es el resultado que quieres obtener para un determinado valor tras mostrarles muchos ejemplos si se dan las condiciones, el algoritmo será capaz de dar un resultado correcto incluso cuando le muestres valores que no ha visto antes.
+  Paso 1: Inicialización
+  
+  \bigskip % Vertical whitespace
 
-  \smallskip % Vertical whitespace
+  Tomando en cuenta que ya se realizo el proceso de generar las seudomuestras $\phi$ representadas por la matriz Z
 
-  Se denomina "clasificación"
-
+  \bigskip % Vertical whitespace
+  
   \begin{itemize}
-    \item Los datos deben estar etiquetados, requiere supervisión humana.
-    \item Se usan datos etiquetados para entrenamiento y se predicen individuos fuera de la muestra de entrenamiento
-  \end{itemize}
-  
-  \smallskip % Vertical whitespace
-
-  A partir de nuestros datos etiquetados entrenar un algoritmo que aprenda en relación a sus atributos.
+  \item Inicializar el valor de los pesos w con valores aleatorios pequeños
     
+    \bigskip % Vertical whitespace
+
+  \item Inicializar el valor de $\theta = 1;\mu,\epsilon$ y épocas. 
+  \end{itemize}\\
 \end{frame}
 
-%------------------------------------------------
-\subsection{Aprendizaje no supervisado ó "clustering"}
 \begin{frame}
-  \frametitle{Aprendizaje no supervisado}
+  Paso 2: Generar la salida de la red
+
+  \begin{itemize}
+
+  \item Suponiendo que se tienen los siguientes valores:
+    \[zi = \begin{pmatrix}
+      0,5\\
+      0,4\\
+    \end{pmatrix}, w=\begin{pmatrix} 0,2 \quad 0,8\\ \end{pmatrix} \lambda = 0.2\]
+
+  \item Obtener la salida de la neurona en la capa de salida (y) dada una seudomuestra $z_{i}$:
+    \[I = \sum_{i=1} ^{n} (w_{i} * \phi_{i})-\theta \rightarrow (0,2 \quad 0,8)\begin{pmatrix}0,5\\0,4\\\end{pmatrix} \]\[= (0,5*0,2) + (0,4*0,8) = 0,42-1 = -0,58\]
+
+    \item Aplicar una función de activación (tanh o sigmoide):
+      \[y = tanh(I) \rightarrow tanh(-0,58) = -0,52\]
+      
+  \end{itemize}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Regla Delta}
+
+  Paso 3: Ajustar los pesos sinápticos w
+
+  \bigskip % Vertical whitespace
+  
+  \begin{itemize}
+  \item Obtener el error e de la red dada una muestra $\phi$: \\
+    (d-y) $\rightarrow$ (1-(-0,52)) = 1,52
+  \item Obtener $\delta$: $e*\frac{\partial I}{\partial y}\rightarrow e*\frac{1}{1+tanh(y)^{2}} \rightarrow 1,52*0,81 = 1,23$
+  \item Ajustar los pesos w: $w+(\lambda*\delta*\phi^{t})\rightarrow (0,2 \quad 0,8)+(0,2*1,23*(0,5 \quad 0,4))$
+    \[(0,5 \quad 0,8)+(0,122 \quad 0,098) = (0,652 \quad 0,898)\]
+  \item Ajustar $\theta$: $\theta + (\lambda * \delta)$
+  \end{itemize}
+  
+\end{frame}
+
+\begin{frame}
+  Paso 4: Evaluación
+  
+  \bigskip % Vertical whitespace
+
+  \begin{itemize}
+  \item Evaluar el error cometido por la red por cada iteración $e_{i} = \frac{1}{2}*(d_{i}-y_{i})^{2}$
+
+    \bigskip % Vertical whitespace
+    
+  \item Al termino de evaluar todas las muestras, calcular el error global:
+    \[ E_{g} = \frac{1}{p} * \sum e_{i}\]
+  \end{itemize}
+\end{frame}
+
+\section{Algoritmo}
+\begin{frame}
+  \begin{algorithm}[H]
+    \algsetup{linenosize=\tiny}
+  \scriptsize
+    \SetAlgoLined
+    Obtener el conjunto de muestras de entrenamiento $X \rightarrow \{X^1,X^2,X^3,...,X^m\}$, donde $X^{m} \rightarrow \{x_1,x_2,x_2,...x_n\}$\;
+    Determinar el número de conjuntos k\;
+    Dar un valor inicial aleatorio a los k centroides c, tomando las primeras k muestras de X\;
+    Indicar el umbral de cambio para los centroides u\;
+    \For{máx iteraciones}{
+      \For{todas las muestras de X}{
+        Calcular la distancia Euclidiana entre cada c y $X^{m}$\;
+        Dado un vector $X^{m}$, determinar a cuál centroide c se encuentra más cercano \;
+        Atribuir $X^{m}$ al grupo $\Omega^{c}$\;
+      }
+      Determinar el cambio de posición de cada centroide c $\rightarrow$ cambio\;
+      \If{u$>$cambio}{
+        terminar ciclo\;
+      }
+    }
+    \For{todo c}{
+      Calcular la variaza de cada función de activación Gaussiana usando el criterio de los minimos cuadrados:\\
+      $\sigma^{2} = \frac{1}{p} \sum_{x^{k}\Epsilon\Omega^{j}} \sum_{i=1} ^{n} (X_{j} ^{k} - C_{i})^{2}$, donde p es el número de muestras \;
+      
+    }
+    \caption{Fase no supervisada, k-means}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}
+  \begin{algorithm}[H]
+    \algsetup{linenosize=\tiny}
+  \scriptsize
+    \SetAlgoLined
+    Obtener las muestras de entrenamiento X\;
+    Obtener las salidas deseadas para cada muestra d\;
+    Inicializar los pesos w con valores aleatorios pequeños\;
+    Especificar la tasa de aprendizaje $\lambda$, el número de épocas máximo y la precisión $\epsilon$ de la red\;
+    \For{todas las muestras X}{
+      Obtener $\phi$ de cada neurona oculta con respecto a $\Omega^{c}$ \rightarrow $\phi_{n1}$ = $e^{\frac{-\sum_{i=1 ^{n} (x_{i}(n)-c_{n1})^{2}}}{2\sigma^{2}_{c}}}$\;
+      Generr seudomuestras $Z \rightarrow$ z = $\{\phi(1),\phi(2),...,\phi(n1)\}$\;
+    }
+    \While{$\epsilon > E$}{
+      $E_{prev} = E_{g}$\;
+      \For{seudomuestra de Z}{
+        Obtener la salida de la red $\rightarrow y = \sum_i=1 ^{n} (\phi_{i}*w_{i})-\theta$\;
+        Ajustar $w \rightarrow w + (z_{i} * \delta * \lambda)$\;
+        Obtener salida de la red con los nuevos w y computar el error cuadrático medio $\rightarrow \frac{1}{2} * (d-y)$\;
+      }
+    }
+    Obtener el error global $E_{g} \rightarrow \frac{E_{medio}}{p}$ donde p es la cantidad de muestras\;
+    Obtener $E \rightarrow |(E_{g}-E_{prev})|$\;
+    \caption{Fase supervisada, Perceptrón - Regla Delta}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}
+  \begin{algorithm}[H]
+    \algsetup{linenosize=\tiny}
+  \scriptsize
+    \SetAlgoLined
+    Obtener las muestras de entrenamiento $X^{m}$\;
+    Obtener las salidas deseadas para cada muestra $d^{m}$\;
+    \For{todas las muestras $X^{m}$}{
+      Obtener $\phi$ de cada neurona oculta con respecto a $\Omega^{c}$ \rightarrow $\phi_{n1}$ = $e^{\frac{-\sum_{i=1 ^{n} (x_{i}(n)-c_{n1})^{2}}}{2\sigma^{2}_{c_{n1}}}}$\;
+      Generr seudomuestras $G^{k} \rightarrow$ z = $\{\phi(1),\phi(2),...,\phi(n1)\}$\;
+    }
+    Obtener matriz de pesos $w \rightarrow G^{+} * S$\;
+    \textbf{return} w\;
+    \caption{Fase supervisada, Perceptrón - Regla Delta}
+  \end{algorithm}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Arquitectura de la red para uso como aproximador de funciones}
 
   \begin{figure}
-    \includegraphics[width=0.4\linewidth]{unsupervised.png}
+    \caption{Arquitectura de red neuronal de base radial}
+    \includegraphics[width=0.6\linewidth]{last_.png}
   \end{figure}
   
-  No existe alguien que enseñe o evalue el proceso de aprendizaje, la red desarrolla la habilidad de formar representaciones internas para abstraer caracteristicas de la entrada y crear nuevas clases automaticamente.
-
-  \bigskip % Vertical whitespace
   
-  \begin{itemize}
-    \item Los datos no están etiquetados
-    \item El algortitmo busca por su cuenta grupos o cluster
-  \end{itemize}
-
-  \bigskip % Vertical whitespace
-  
-  Nuestro algoritmo es ciego y sólo conoce los atributos y en base a esas caracteristicas crear grupos
-
 \end{frame}
 
+\section{Implementación Python}
 \begin{frame}
+  \frametitle{Implementación Python}
 
-  Se hace uso de reglas de aprendizaje competitivas "winner-takes-all"
-
-  \bigskip % Vertical whitespace
+  Aproximador universal de funciones
 
   \begin{itemize}
-     \item Capa de entrada recibe la información disponible 
-     \item Capa competitiba consiste de neuronas que compiten entre ellas (en base a la regal de aprendizaje) para la esperanza de responder, la neurona con el mejor acierto ganara y se activará, dejando a las demas neuronas apagadas.
+  \item Estableciendo $\lambda = 0,015$ y un total de épocas de 5000
   \end{itemize}
   
-\end{frame}
-
-\subsection{Aprendizaje por refuerzo}
-\begin{frame}
-  \frametitle{Aprendizaje por refuerzo ¿Fuerza Bruta?}
-  
-  No tenemos una "etiqueta de salida", por lo que no es de tipo supervisado y si bien estos algoritmos aprenden por sí mismos, tampoco son de tipo no supervisado, en donde se intenta clasificar grupos teniendo en cuenta alguna distancia entre muestras.
-
-  \bigskip % Vertical whitespace
-
-  El Aprendizaje por refuerzo, intentará hacer aprender a la máquina basándose en un esquema de "premios y castigos" - en un entorno en donde hay que tomar acciones y que está afectando por múltiples variables que cambian con el tiempo.
-
-  \bigskip % Vertical whitespace
-
-  En modelos de Aprendizaje Supervisado (o no supervisado) se intenta minimizar la función de coste,.. es decir reducir el error.
-
-  \bigskip % Vertical whitespace
-
-  En cambio en Aprendizaje Reforzado intenta "maximizar la recompensa" con la continua interacción con el ambiente para minimizar el index scalar de desempeño.
-
-\end{frame}
-
-\begin{frame}
-  \frametitle{Componentes del RL}
-
   \begin{figure}
-    \includegraphics[width=0.3\linewidth]{RL.png}
+    \caption{Usando 1 neurona $\phi$}
+    \includegraphics[width=0.6\linewidth]{1neurona.png}
   \end{figure}
   
-  \begin{itemize}
-  \item Agente - será nuestro modelo que queremos entrenar y que aprenda a tomar decisiones
-  \item Ambiente - será el entorno en donde interactúa y se mueve el agente. Contiene las limitaciones y reglas posibles en cada momento
-  \item Acción - posibles acciones que puede tomar en un momento determinado el agente
-  \item Recompensas (ó castigos) - podremos obtener un premio ó penalización que oriente al agente en si lo está haciendo bien o mal.
-  \end{itemize}
-
-  \bigskip % Vertical whitespace
-  
-  Si la recompensa es positiva estaremos \alert{reforzando} ese comportamiento para el futuro. En cambio si la recompensa es negativa lo estaremos penalizando, para que ante la misma sutuación el agente actúe de manera distinta. 
   
 \end{frame}
 
 \begin{frame}
-  \frametitle{Q-Learning, el algoritmo más usado}
+  \begin{figure}
+    \caption{Usando 3 neuronas $\phi$}
+    \includegraphics[width=0.6\linewidth]{3neuronas.png}
+  \end{figure}
+\end{frame}
 
-  El objetivo es entrenar nuestro modelo a través de simulaciones de manera que las decisiones que vaya toamdno nuestro agente obtengan "la mayor recompensa"
-  
-  \begin{itemize}
-  \item Politicas - Tabla que indicará al modelo como actuar en cada estado
-  \item Acciones - las diversas acciones que puede hacer el agente
-  \item Recompensas - si sumamos ó restamos puntaje con la acción tomada
-  \item Comportamiento greedy - Tener grandes recompensas inmediatas o ir explorando y valorando las riquezas a largo plazo
-  \end{itemize}
+\begin{frame}
+  \begin{figure}
+    \caption{Usando 4 neuronas $\phi$}
+    \includegraphics[width=0.6\linewidth]{4neuronas.png}
+  \end{figure}
+\end{frame}
 
-  
+\begin{frame}
+  \begin{figure}
+    \caption{Usando 6 neuronas $\phi$}
+    \includegraphics[width=0.6\linewidth]{6neuronas.png}
+  \end{figure}
 \end{frame}
 %------------------------------------------------
 
