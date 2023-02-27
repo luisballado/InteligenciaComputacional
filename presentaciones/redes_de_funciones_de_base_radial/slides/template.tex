@@ -255,23 +255,26 @@
   \end{enumerate}
 \end{frame}
 
-\section{Paradigmas de Aprendizaje}
+\section{El proceso de aprendizaje de la red RBF}
 
 \begin{frame}
   
   \frametitle{El proceso de aprendizaje de la red RBF}
   Este proceso se suele llamar híbrido ya que se divide en dos fases:\\
+
   \bigskip % Vertical whitespace
+  
   \begin{itemize}
   \item \textbf{Fase no supervisada}\\
     Se encarga de obtener el valor de los centroides C y la varianza $\sigma$. \\
     Para esto se suele utilizar el método \textbf{k-means}
+
+    \bigskip % Vertical whitespace
+    
   \item \textbf{Fase supervisada}\\
     Consiste en calcular los pesos w y umbral $\theta$ de las neuronas de la capa de salida. Para esto se suele utilizar el método de la \textbf{Regla Delta} o bien el método de la \textbf{matriz seudoinversa}
   \end{itemize}
 \end{frame}
-
-\section{El proceso de aprendizaje de la red RBF}
 
 \begin{frame}
   Terminología:
@@ -339,9 +342,9 @@
     \includegraphics[width=0.7\linewidth]{rbradial.png}
   \end{figure}
   $G= \begin{pmatrix}
-    \phi_{1}^{1} \phi_{1}^{2}\\
-    \phi_{2}^{1} \phi_{2}^{2}\\
-    \phi_{m}^{1} \phi_{m}^{2}\\
+    \phi_{1}^{1} \quad \phi_{1}^{2}\\
+    \phi_{2}^{1} \quad \phi_{2}^{2}\\
+    \phi_{m}^{1} \quad \phi_{m}^{2}\\
   \end{pmatrix}  $,
   $S= \begin{pmatrix}
     d_{1}\\
@@ -358,9 +361,9 @@
   \frametitle{}
   Suponiendo que se tienen los siguientes valores de G y S:
   \[G= \begin{pmatrix}
-    1 1\\
-    1 2\\
-    1 3\\
+    1 \quad 1\\
+    1 \quad 2\\
+    1 \quad 3\\
   \end{pmatrix},
   S = \begin{pmatrix}
     2\\
@@ -375,17 +378,17 @@
   \bigskip % Vertical whitespace
 
   \[P_{1}= \begin{pmatrix}
-    1 1 1\\
-    1 2 3\\
+    1 \quad 1 \quad 1\\
+    1 \quad 2 \quad 3\\
   \end{pmatrix}
   \begin{pmatrix}
-    1 1\\
-    1 2\\
-    1 3\\
+    1 \quad 1\\
+    1 \quad 2\\
+    1 \quad 3\\
   \end{pmatrix} =
   \begin{pmatrix}
-    3 6\\
-    6 14\\
+    3 \quad 6\\
+    6 \quad 14\\
   \end{pmatrix}\]
   
   
@@ -399,26 +402,31 @@
 
   Calcular la inversa $(G^{t}*G)^{-1} \rightarrow (P_{1}^{-1})$\\
 
+  \[P_{2} = \begin{pmatrix}
+    3 \quad  6 \qquad | 1 \quad 0 \\
+    6 \quad 14 \quad | 0 \quad 1 \\
+  \end{pmatrix}\]
+  
   Utilizado el método de Gauss-Jordan:\\
 
   $R1*\frac{1}{3} = \begin{pmatrix}
-    1  2 | \frac{1}{3} 0\\
-    6 14 | 0 1\\
+    1 \quad 2 | \frac{1}{3} \quad 0\\
+    6 \quad14 | 0 \quad 1\\
   \end{pmatrix} \rightarrow R2 - 6R1 = \begin{pmatrix}
-    1 2 | \frac{1}{3} 0\\
-    0 2 | -2 1\\
+    1 \quad 2 | \frac{1}{3} \quad 0\\
+    0 \quad 2 | -2 \quad 1\\
   \end{pmatrix} \rightarrow R1-R2 = \begin{pmatrix}
-    1 0 | \frac{7}{3} -1\\
-    0 2 | -2 1\\
+    1 \quad 0 | \frac{7}{3} \quad -1\\
+    0 \quad 2 | -2 \quad 1\\
   \end{pmatrix} \rightarrow R2 * \frac{1}{2} = \begin{pmatrix}
-    1 0 | \frac{7}{3} -1\\
-    0 1 | -1 \frac{1}{2}\\
+    1 \quad 0 | \frac{7}{3} \quad -1\\
+    0 \quad 1 | -1 \quad \frac{1}{2}\\
   \end{pmatrix}$\\
 
   Entonces $(G^{t}*G)^{-1}$ es: \\
   \[P2 = \begin{pmatrix}
-    \frac{7}{3} (-1)\\
-    (-1) \frac{1}{2}\\
+    \frac{7}{3} \quad -1\\
+    -1 \quad \frac{1}{2}\\
   \end{pmatrix}\]
 \end{frame}
 %------------------------------------------------
@@ -429,22 +437,22 @@
   \[(P_{1})^{-1} = \frac{1}{|P_{1}|}*(P_{1}^{*})^{t}\]
 
   Si $P_{1} = \begin{pmatrix}
-    3 6\\
-    6 14\\
+    3 \quad 6\\
+    6 \quad 14\\
   \end{pmatrix}$ Entonces:\\
   $|P_{1}|= \begin{pmatrix}
-    3 6\\
-    6 14\\
+    3 \quad 6\\
+    6 \quad 14\\
   \end{pmatrix} \rightarrow 42-36=6$
   $P_{1}^{*} = \begin{pmatrix}
-    14 -6\\
-    -6  3\\
+    14 \quad -6\\
+    -6 \quad  3\\
   \end{pmatrix} \rightarrow (P_{1}^{*})^{t} = \begin{pmatrix}
-    14 -6\\
-    -6  3\\
+    14 \quad -6\\
+    -6 \quad  3\\
     \end{pmatrix}$
-  $\frac{1}{|P_{1}|}*(P_{1}^{*})^{t} = \frac{\begin{pmatrix} 14 -6\\-6 3\\ \end{pmatrix}}{6} \rightarrow \begin{pmatrix} \frac{7}{3} -1\\
-    -1 \frac{1}{2}\\
+  $\frac{1}{|P_{1}|}*(P_{1}^{*})^{t} = \frac{\begin{pmatrix} 14 \quad -6\\-6 \quad 3\\ \end{pmatrix}}{6} \rightarrow \begin{pmatrix} \frac{7}{3} \quad -1\\
+    -1 \quad \frac{1}{2}\\
   \end{pmatrix}$ 
 \end{frame}
 
@@ -452,28 +460,27 @@
   Paso 3: Calcular $((G^{t}*G)^{-1}*G^{t}) \rightarrow (P_{2}*G^{t})$:\\
   
   \[P_{3} = \begin{pmatrix}
-    \frac{7}{3} -1\\
-    -1  \frac{1}{2}\\
+    \frac{7}{3} \quad -1\\
+    -1 \quad \frac{1}{2}\\
   \end{pmatrix} * \begin{pmatrix}
-    1 1 1\\
-    1 2 3\\
+    1 \quad 1 \quad 1\\
+    1 \quad 2 \quad 3\\
   \end{pmatrix} = \begin{pmatrix}
-    \frac{4}{3} \frac{1}{3} \frac{-2}{3}\\
-    \frac{-1}{2} 0 \frac{1}{2}\\
+    \frac{4}{3} \quad \frac{1}{3} \quad \frac{-2}{3}\\
+    \frac{-1}{2} \quad 0 \quad \frac{1}{2}\\
   \end{pmatrix}\]\\
 
   Paso 4: Obtener w por medio de $P_{3}*S:$ \\
 
   \[ w = \begin{pmatrix}
-    \frac{4}{3} \frac{1}{3}  \frac{-2}{3}\\
-    \frac{-1}{2} 0  \frac{1}{2}\\
+    \frac{4}{3} \quad \frac{1}{3} \quad \frac{-2}{3}\\
+    \frac{-1}{2} \quad 0 \quad \frac{1}{2}\\
   \end{pmatrix} \begin{pmatrix}
     2\\
     2\\
     4\\
   \end{pmatrix} = \begin{pmatrix}
     \frac{2}{3}\\
-    3\\
     1\\
   \end{pmatrix}
   \]\\
@@ -553,7 +560,7 @@
     (d-y) $\rightarrow$ (1-(-0,52)) = 1,52
   \item Obtener $\delta$: $e*\frac{\partial I}{\partial y}\rightarrow e*\frac{1}{1+tanh(y)^{2}} \rightarrow 1,52*0,81 = 1,23$
   \item Ajustar los pesos w: $w+(\lambda*\delta*\phi^{t})\rightarrow (0,2 \quad 0,8)+(0,2*1,23*(0,5 \quad 0,4))$
-    \[(0,5 \quad 0,8)+(0,122 \quad 0,098) = (0,652 \quad 0,898)\]
+    \[(0,2 \quad 0,8)+(0,122 \quad 0,098) = (0,322 \quad 0,898)\]
   \item Ajustar $\theta$: $\theta + (\lambda * \delta)$
   \end{itemize}
   
@@ -577,7 +584,7 @@
 \section{Algoritmo}
 \begin{frame}
   \begin{algorithm}[H]
-    \algsetup{linenosize=\tiny}
+    \algsetup{\tiny}
   \scriptsize
     \SetAlgoLined
     Obtener el conjunto de muestras de entrenamiento $X \rightarrow \{X^1,X^2,X^3,...,X^m\}$, donde $X^{m} \rightarrow \{x_1,x_2,x_2,...x_n\}$\;
@@ -597,7 +604,7 @@
     }
     \For{todo c}{
       Calcular la variaza de cada función de activación Gaussiana usando el criterio de los minimos cuadrados:\\
-      $\sigma^{2} = \frac{1}{p} \sum_{x^{k}\Epsilon\Omega^{j}} \sum_{i=1} ^{n} (X_{j} ^{k} - C_{i})^{2}$, donde p es el número de muestras \;
+      $\sigma^{2} = \frac{1}{p} \sum_{x^{k} \epsilon \Omega^{j}} \sum_{i=1} ^{n} (X_{i} ^{k} - C_{i})^{2}$, donde p es el número de muestras \;
       
     }
     \caption{Fase no supervisada, k-means}
@@ -606,7 +613,7 @@
 
 \begin{frame}
   \begin{algorithm}[H]
-    \algsetup{linenosize=\tiny}
+    \algsetup{\tiny}
   \scriptsize
     \SetAlgoLined
     Obtener las muestras de entrenamiento X\;
@@ -614,37 +621,37 @@
     Inicializar los pesos w con valores aleatorios pequeños\;
     Especificar la tasa de aprendizaje $\lambda$, el número de épocas máximo y la precisión $\epsilon$ de la red\;
     \For{todas las muestras X}{
-      Obtener $\phi$ de cada neurona oculta con respecto a $\Omega^{c}$ \rightarrow $\phi_{n1}$ = $e^{\frac{-\sum_{i=1 ^{n} (x_{i}(n)-c_{n1})^{2}}}{2\sigma^{2}_{c}}}$\;
-      Generr seudomuestras $Z \rightarrow$ z = $\{\phi(1),\phi(2),...,\phi(n1)\}$\;
+      Obtener $\phi$ de cada neurona oculta con respecto a $\Omega^{c}$ \rightarrow $\phi_{n1}$ = $e^{\frac{-\sum_{i=1} ^{n} (x_{i}(n)-c_{n1})^{2}}{2\sigma^{2}_{c}}}$\;
+      Generar seudomuestras $Z \rightarrow$ z = $\{\phi(1),\phi(2),...,\phi(n1)\}$\;
     }
     \While{$\epsilon > E$}{
       $E_{prev} = E_{g}$\;
       \For{seudomuestra de Z}{
-        Obtener la salida de la red $\rightarrow y = \sum_i=1 ^{n} (\phi_{i}*w_{i})-\theta$\;
+        Obtener la salida de la red $\rightarrow y = \sum_{i=1} ^{n} (\phi_{i}*w_{i})-\theta$\;
         Ajustar $w \rightarrow w + (z_{i} * \delta * \lambda)$\;
         Obtener salida de la red con los nuevos w y computar el error cuadrático medio $\rightarrow \frac{1}{2} * (d-y)$\;
       }
+      Obtener el error global $E_{g} \rightarrow \frac{E_{medio}}{p}$ donde p es la cantidad de muestras\;
+      Obtener $E \rightarrow |(E_{g}-E_{prev})|$\;
     }
-    Obtener el error global $E_{g} \rightarrow \frac{E_{medio}}{p}$ donde p es la cantidad de muestras\;
-    Obtener $E \rightarrow |(E_{g}-E_{prev})|$\;
     \caption{Fase supervisada, Perceptrón - Regla Delta}
   \end{algorithm}
 \end{frame}
 
 \begin{frame}
   \begin{algorithm}[H]
-    \algsetup{linenosize=\tiny}
+    \algsetup{\tiny}
   \scriptsize
     \SetAlgoLined
     Obtener las muestras de entrenamiento $X^{m}$\;
     Obtener las salidas deseadas para cada muestra $d^{m}$\;
     \For{todas las muestras $X^{m}$}{
-      Obtener $\phi$ de cada neurona oculta con respecto a $\Omega^{c}$ \rightarrow $\phi_{n1}$ = $e^{\frac{-\sum_{i=1 ^{n} (x_{i}(n)-c_{n1})^{2}}}{2\sigma^{2}_{c_{n1}}}}$\;
+      Obtener $\phi$ de cada neurona oculta con respecto a $\Omega^{c_{n1}}$ \rightarrow $\phi_{n1}$ = $e^{\frac{-\sum_{i=1} ^{n} (x_{i}(n)-c_{n1})^{2}}{2\sigma^{2}_{c_{n1}}}}$\;
       Generr seudomuestras $G^{k} \rightarrow$ z = $\{\phi(1),\phi(2),...,\phi(n1)\}$\;
     }
     Obtener matriz de pesos $w \rightarrow G^{+} * S$\;
     \textbf{return} w\;
-    \caption{Fase supervisada, Perceptrón - Regla Delta}
+    \caption{Fase supervisada, Perceptrón - Matriz seudoinversa}
   \end{algorithm}
 \end{frame}
 

@@ -21,16 +21,19 @@ f, c = X.shape
 fac_ap = 0.02
 precision = 0.01
 epocas = 1000 #2000
+
 # Arquitectura de la red
-n_ocultas = 2 #probar de 2 hasta 7
+n_ocultas = 2 #3 #4 #5 #6 #probar hasta 6
 n_salida = 1
 
 # Iniciar Red
 red = rbf(n_ocultas, n_salida)
 
+# Aprendizaje enviar transpuesta de x, etiquetas, tasa de aprendizaje, epocas y precision
 epochs, Er,w,var,cent = red.APRENDER(X.T,d,fac_ap,epocas,precision)
-print("Total epocas:", epochs)
+print("Total epocas:", epochs) #Total de epocas
 
+# ver que tan bien aprendio
 y = red.OPERACION(X2.T,w,cent,var)
 y = np.array(y)
 y = y[:, 0, 0]
@@ -45,10 +48,12 @@ plt.title("Aproximador de funciones", fontsize=14)
 plt.plot(X2[:,0], y, 'b', label="Señal obtenida")
 plt.plot(X[:,0], d, 'r', label="Señal deseada")
 plt.legend(loc='upper right')
-plt.savefig('prueba.png')
-#plt.show()
+#plt.savefig('prueba.png')
+plt.show()
+
 
 #figure(2)
+# Error cometido por la red dada la fase de entrenamiento
 plt.grid()  # Activar rejilla
 plt.ylabel("Error", fontsize=12)
 plt.xlabel("Épocas", fontsize=12)
@@ -57,5 +62,5 @@ Er = np.array(Er)
 Er = Er[:, 0, 0]
 plt.plot(Er, 'g', label="Error cuadratico")
 plt.legend(loc='upper right')
-#plt.show()
-plt.savefig('prueba2.png')
+plt.show()
+#plt.savefig('prueba2.png')

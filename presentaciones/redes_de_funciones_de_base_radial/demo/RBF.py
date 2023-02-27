@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Mar 19 11:12:59 2020
-
 @author: Victor Romero 
 Nombre: Red RBF 
 Requerimientos: Archivo del clasificador KMEANS
@@ -10,24 +8,34 @@ import numpy as np
 from kmeans import KMEANS
 
 class rbf:
+    #Definir el numero de neuronas de capa oculta y numero de neuronas de la capa de salida
     def __init__(self,n_oc=2,n_s=1):
         # Inicializar arquitectura de la red
         self.n_oc = n_oc # neuronas Gaussianas
         self.n_s = n_s
         # generar valores aleatoreos de los pesos sinapticos
         np.random.seed(0)
-        self.w = np.random.rand(n_s,n_oc+1)
-    
+        self.w = np.random.rand(n_s,n_oc+1) #agregamos uno por el valor del umbral
+
+    """
+    Proceso de aprendizaje
+    data_train - datos de entrenamiento
+    labels - etiquetas
+    l_rate - tasa de aprendizaje
+    ep - numero max de epocas
+    presicion - error minimo a tolerar
+    """
     def APRENDER(self, data_train, labels, l_rate = 0.2, ep=100, press=0.1):
-        # obtener centroides
+        # obtener centroides con clasificador kmeans y clusters los conjuntos
         centroides,clusters = self.AP_NO_SUPERVISADO(self.n_oc, data_train)
         # obtener varianza 
         varianza = self.VARIANZA(centroides, clusters)
         epocas,errores = self.AP_SUPERVISADO(data_train,labels,l_rate,ep,press,centroides,varianza)
         return epocas, errores, self.w, varianza, centroides
-        
+
+    #Inicializar k means donde le pasamos el numero de k donde es el numero de neuronas de la capa oculta
     def AP_NO_SUPERVISADO(self,k,X):
-        clasificador  = KMEANS(k,50,0.1)
+        clasificador  = KMEANS(k,50,0.1) #regresa el valor de conjuntos y centroides
         return clasificador.AGRUPAR(X)
             
     def AP_SUPERVISADO(self,data_train,labels,l_rate,ep,press,centroides,sigma):
@@ -94,10 +102,12 @@ class rbf:
                 # computar peso de la muestra sobre el centroide
                 Z[j,i] = PESO(distancia[i],varianza[j])
         return Z
-                
+
+    #recibe centroides y clusters
+    #calcular la distancia euclidiana
     def VARIANZA(self,centros,clusters):
         # generar sigma
-        varianza = np.empty(len(clusters))
+        varianza = np.empty(len(clusters)) #matriz respecto al numero de conjuntos
         for i in range(len(clusters)):
             conjunto = np.empty(len(clusters[i]))
             for j in range(len(clusters[i])):
@@ -105,7 +115,8 @@ class rbf:
                 
             varianza[i] = ((1/len(clusters[i]))) * np.sum(conjunto)
         return varianza
-    
+
+    #Asumimos que tenemos el valor de los pesos, centroides y varianza
     def OPERACION(self,data_val, w,centroides,varianza):
         self.w = w
         y = []
