@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Created on Sat Mar 20 11:00:37 2021
-
-@author: Victor Romero
+Funciones a plotear
 
 """
 import numpy as np

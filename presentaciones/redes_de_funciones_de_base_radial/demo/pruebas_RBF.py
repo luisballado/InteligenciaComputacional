@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Mar 19 18:39:35 2021
-
-@author: Victor Romero
 Nombre: RBF
 Requerimientos: Archivo del clasificador RBF
 """
@@ -20,10 +17,10 @@ X,d,X2,d2=funcion1(-11, 10)
 f, c = X.shape
 fac_ap = 0.02
 precision = 0.01
-epocas = 1000 #2000
+epocas = 5000
 
 # Arquitectura de la red
-n_ocultas = 2 #3 #4 #5 #6 #probar hasta 6
+n_ocultas = 8 #6 #probar hasta 6
 n_salida = 1
 
 # Iniciar Red

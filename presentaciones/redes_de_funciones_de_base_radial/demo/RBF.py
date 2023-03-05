@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 """
-@author: Victor Romero 
 Nombre: Red RBF 
 Requerimientos: Archivo del clasificador KMEANS
 """
