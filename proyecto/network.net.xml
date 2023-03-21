@@ -1,0 +1,27 @@
+<net version="1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://sumo.dlr.de/xsd/net_file.xsd">
+
+  <location netOffset="0,0" convBoundary="0.00,0.00,60.00,60.00" origBoundary="0.00,0.00,60.00,60.00" projParameter="!"/>
+
+  <edge id="gneE0" from="gneJ0" to="gneJ1" priority="1" numLanes="2" speed="50" />
+  <edge id="gneE1" from="gneJ1" to="gneJ0" priority="1" numLanes="2" speed="50" />
+  <edge id="gneE2" from="gneJ1" to="gneJ2" priority="1" numLanes="2" speed="50" />
+  <edge id="gneE3" from="gneJ2" to="gneJ1" priority="1" numLanes="2" speed="50" />
+  <edge id="gneE4" from="gneJ2" to="gneJ3" priority="1" numLanes="2" speed="50" />
+  <edge id="gneE5" from="gneJ3" to="gneJ2" priority="1" numLanes="2" speed="50" />
+  <edge id="gneE6" from="gneJ3" to="gneJ0" priority="1" numLanes="2" speed="50" />
+  <edge id="gneE7" from="gneJ0" to="gneJ3" priority="1" numLanes="2" speed="50" />
+
+  <junction id="gneJ0" type="traffic_light" x="30.00" y="30.00" incLanes="2" intLanes="1" shape="0.00,-15.00 0.00,-5.00 0.00,5.00 0.00,15.00" />
+  <junction id="gneJ1" type="priority" x="20.00" y="30.00" incLanes="2" shape="-15.00,0.00 -5.00,0.00 5.00,0.00 15.00,0.00" />
+  <junction id="gneJ2" type="priority" x="30.00" y="40.00" incLanes="2" shape="0.00,-15.00 0.00,-5.00 0.00,5.00 0.00,15.00" />
+  <junction id="gneJ3" type="priority" x="40.00" y="30.00" incLanes="2" shape="-15.00,0.00 -5.00,0.00 5.00,0.00 15.00,0.00" />
+
+  <connection from="gneJ0" to="gneE1" fromLane="0" toLane="0" />
+  <connection from="gneJ0" to="gneE7" fromLane="1" toLane="1" />
+  <connection from="gneJ1" to="gneE0" fromLane="0" toLane="0" />
+  <connection from="gneJ1" to="gneE2" fromLane="1" toLane="1" />
+  <connection from="gneJ2" to="gneE3" fromLane="0" toLane="0" />
+  <connection from="gneJ2" to="gneE4" fromLane="1" toLane="1" />
+  <connection from="gneJ3" to="gneE5" fromLane="0" toLane="0" />
+  <connection from="gneJ3" to="gneE6" fromLane="1" toLane="1" />
+</net>

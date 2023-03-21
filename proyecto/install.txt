@@ -1,0 +1,17 @@
+https://sumo.dlr.de/docs/Downloads.php
+
+Linux
+
+The community maintains several repositories notably at the open build service. For a detailed list of repositories see below.
+
+Furthermore there are a debian and an ubuntu launchpad project as well as an archlinux package:
+
+    https://salsa.debian.org/science-team/sumo.git
+    https://launchpad.net/~sumo
+    https://aur.archlinux.org/packages/sumo/
+
+To add the most recent sumo to your ubuntu you will need to do:
+
+sudo add-apt-repository ppa:sumo/stable
+sudo apt-get update
+sudo apt-get install sumo sumo-tools sumo-doc
