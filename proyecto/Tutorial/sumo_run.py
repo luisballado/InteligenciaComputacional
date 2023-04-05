@@ -14,27 +14,11 @@ def getdatetime():
 
         return DATIME
 
-def flatten_list(_2d_list):
-        flat_list = []
-        for element in _2d_list:
-                if type(element) is list:
-                        for item in element:
-                                flat_list.append(item)
-                else:
-                        flat_list.append(element)
-                        
-        return flat_list
-
 #levantar sumo
 #COMANDO -c ARCHIVO
-#sumoCmd = ["sumo-gui", "-c", "osm.sumocfg"]
-sumoCmd = ["sumo-gui", "-c", "cluster_lanearea60.sumocfg"]
+sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"]
 
 traci.start(sumoCmd)
-
-#packVehicleData = []
-#packTLSData = []
-#packBigData = []
 
 #Run a simulation until all vehicles have arrived
 while traci.simulation.getMinExpectedNumber() > 0:
@@ -136,7 +120,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
                                 tl_state = traci.trafficlight.getRedYellowGreenState(trafficlights[k])
                                 tl_phase_duration = traci.trafficlight.getPhaseDuration(trafficlights[k])
                                 tl_lanes_controlled = traci.trafficlight.getControlledLanes(trafficlights[k])
-                                tl_program = traci.trafficlight.getCompleteRedYellowGreenDefinition(trafficlights[k])
+                                tl_program = []
+                                #tl_program = traci.trafficlight.getCompleteRedYellowGreenDefinition(trafficlights[k])
                                 tl_next_switch = traci.trafficlight.getNextSwitch(trafficlights[k])
                                 
                                 #Packing of all the data for export to CSV/XLSX
@@ -154,7 +139,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                                       #one entry for every element of the phase state (signal index)                                
                                       " Lanes controlled: ", traci.trafficlight.getControlledLanes(trafficlights[k]), " |", \
                                       #Returns the complete traffic light program, structure described under data types                                      
-                                      " TLS Program: ", traci.trafficlight.getCompleteRedYellowGreenDefinition(trafficlights[k]), " |"
+                                      #" TLS Program: ", traci.trafficlight.getCompleteRedYellowGreenDefinition(trafficlights[k]), " |"
                                       #Returns the assumed time (in seconds) at which the tls changes the phase. Please note that
                                       #the time to switch is not relative to current simulation step (the result returned by the query
                                       #will be absolute time, counting from simulation start);
@@ -163,11 +148,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                                       #actuated/adaptive traffic lights
                                       " Next TLS switch: ", traci.trafficlight.getNextSwitch(trafficlights[k]))
                                 
-                #Pack Simulated Data
-                #packBigDataLine = flatten_list([vehList, tlsList])
-                #packBigData.append(packBigDataLine)
-
-                
+                                
                 ##----------MACHINE LEARNING CODES/FUNCTIONS HERE----------##
 
 
@@ -188,13 +169,13 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 #***SET FUNCTION FOR TRAFFIC LIGHTS***
                 #REF: https://sumo.dlr.de/docs/TraCI/Change_Traffic_Lights_State.html
                 
-                trafficlightduration = [5,37,5,35,6,3]
-                #trafficsignal = ["GGGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGGG", "GGGGGGGGGGGGGGGG"]
-                trafficsignal = ["rrrrrrGGGGgGGGrr", "yyyyyyyyrrrrrrrr", "rrrrrGGGGGGrrrrr", "rrrrryyyyyyrrrrr", "GrrrrrrrrrrGGGGg", "yrrrrrrrrrryyyyy"]
-                tfl = "cluster_4260917315_5146794610_5146796923_5146796930_5704674780_5704674783_5704674784_5704674787_6589790747_8370171128_8370171143_8427766841_8427766842_8427766845"
-                
-                traci.trafficlight.setPhaseDuration(tfl, trafficlightduration[randrange(6)])
-                traci.trafficlight.setRedYellowGreenState(tfl, trafficsignal[randrange(6)])
+                trafficlightduration = [5,37,5,35]
+                trafficsignal = ["GGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGG"]
+                #trafficsignal = ["rrrrrGGGggrrrrrGGGgg", "rrrrryyyyyrrrrryyyyy", "GGGggrrrrrGGGggrrrrr", "yyyyyrrrrryyyyyrrrrr"]
+                #tfl = "cluster_4260917315_5146794610_5146796923_5146796930_5704674780_5704674783_5704674784_5704674787_6589790747_8370171128_8370171143_8427766841_8427766842_8427766845"
+                tfl = "cluster_1387998613_1387998619_1387998643_1387998651"
+                traci.trafficlight.setPhaseDuration(tfl, trafficlightduration[randrange(4)])
+                traci.trafficlight.setRedYellowGreenState(tfl, trafficsignal[randrange(4)])
 
                 ##------------------------------------------------------##
                 
