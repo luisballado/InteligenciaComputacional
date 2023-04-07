@@ -1,10 +1,9 @@
 import traci
-import time
+#import time
 import traci.constants as tc
-import pytz
+import pytz #time
 import datetime
 from random import randrange
-import pandas as pd
 
 #Sacar tiempo
 def getdatetime():
@@ -20,18 +19,23 @@ sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"]
 
 traci.start(sumoCmd)
 
-#Run a simulation until all vehicles have arrived
+#comenzar simulacion cuando hasta que llegue un vehiculo
 while traci.simulation.getMinExpectedNumber() > 0:
         
         traci.simulationStep();
-        
-        vehicles=traci.vehicle.getIDList();
+
+        #https://sumo.dlr.de/docs/TraCI/Vehicle_Value_Retrieval.html
         trafficlights=traci.trafficlight.getIDList();
         detlist = traci.lanearea.getIDList()
-
+        vehicles=traci.vehicle.getIDList();
+        """
+        
+        
+        
         #para todos los carros en el simulador
-        for i in range(0,len(vehicles)):
 
+        for i in range(0,len(vehicles)):
+                
                 #Function descriptions
                 #https://sumo.dlr.de/docs/TraCI/Vehicle_Value_Retrieval.html
                 #https://sumo.dlr.de/pydoc/traci._vehicle.html#VehicleDomain-getSpeed
@@ -67,32 +71,63 @@ while traci.simulation.getMinExpectedNumber() > 0:
                       #Return list of upcoming traffic lights [(tlsID, tlsIndex, distance, state), ...]
                       " \nUpcoming traffic lights: ", traci.vehicle.getNextTLS(vehicles[i]), \
                 )
-                
+                """
+        
                 
                 #print([traci.lanearea.getLastStepVehicleNumber(det) for det in detlist])
-                for det in detlist:
-                        print("######################################################################")
-                        print("LaneID : " + traci.lanearea.getLaneID(det))
-                        print("ID Count: " + str(traci.lanearea.getIDCount))
-                        print("Position: " + str(traci.lanearea.getPosition(det)))
-                        print("LastStepMeanSpeed: " + str(traci.lanearea.getLastStepMeanSpeed(det)))
-                        print("VehicleIDs : " + str(traci.lanearea.getLastStepVehicleIDs(det)))
-                        print("LastStepOccupancy : " + str(traci.lanearea.getLastStepOccupancy(det)))
-                        print("JamVehicle: " + str(traci.lanearea.getJamLengthVehicle(det)))
-                        print("JamLengthMeters: " + str(traci.lanearea.getJamLengthMeters(det)))
-                        print("IntervalOccupancy: " + str(traci.lanearea.getIntervalOccupancy(det)))
-                        print("IntervalMeanSpeed: " + str(traci.lanearea.getIntervalMeanSpeed(det)))
-                        print("IntervalVehicleNumber: " + str(traci.lanearea.getIntervalVehicleNumber(det)))
-                        print("JamInMeters: " + str(traci.lanearea.getIntervalMaxJamLengthInMeters(det)))
-                        print("IntervalMeanSpeed: " + str(traci.lanearea.getIntervalMeanSpeed(det)))
-                        print("IntervalVehicleNumber: " + str(traci.lanearea.getLastIntervalVehicleNumber(det)))
-                        print("LastIntervalVehicleNumber: " + str(traci.lanearea.getLastIntervalMaxJamLengthInMeters(det)))
-                        print("---------------------------------------------------")                        
-                        print("CARROS EN ZONA: " + str(traci.lanearea.getLastStepVehicleNumber(det)))
-                        print("###################################################")                        
-                        
-                #print([traci.lanearea.getLastStepVehicleNumber(det) for det in detlist])
-
+                #https://sumo.dlr.de/docs/TraCI/Lane_Area_Detector_Value_Retrieval.html
+        for det in detlist:
+                print("######################################################################")
+                print("LANE AREA DETECTOR: " + det)
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the ID of the lane the detector is placed at.
+                print("LaneID : " + traci.lanearea.getLaneID(det))
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the length of the detector in meters.
+                print("Length: " + str(traci.lanearea.getLength(det)) + "m")
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the number of lane area detectors within the scenario (the given DetectorID is ignored)
+                print("ID Count: " + str(traci.lanearea.getIDCount))
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the starting position of the detector at it's lane, counted from the lane's begin, in meters.
+                print("Position: " + str(traci.lanearea.getPosition(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the mean speed of vehicles that have been within the named area detector within the last simulation step [m/s]
+                print("LastStepMeanSpeed: " + str(traci.lanearea.getLastStepMeanSpeed(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the list of ids of vehicles that have been within the detector in the last simulation step
+                print("VehicleIDs : " + str(traci.lanearea.getLastStepVehicleIDs(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the percentage of space the detector was occupied by a vehicle [%]
+                print("LastStepOccupancy : " + str(traci.lanearea.getLastStepOccupancy(det))+"%")
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the number of vehicles which were halting during the last time step
+                print("JamVehicle: " + str(traci.lanearea.getJamLengthVehicle(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # Returns the length of the jam in meters
+                print("JamLengthMeters: " + str(traci.lanearea.getJamLengthMeters(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # The average percentage of the detector length that was occupied by a vehicle during the current interval
+                print("IntervalOccupancy: " + str(traci.lanearea.getIntervalOccupancy(det))+"%")
+                # --------------------------------------------------------------------------------------------------------
+                # The average (time mean) speed of vehicles during the current interval
+                print("IntervalMeanSpeed: " + str(traci.lanearea.getIntervalMeanSpeed(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # The number of vehicles (or persons, if so configured) that passed the detector during the current interval
+                print("IntervalVehicleNumber: " + str(traci.lanearea.getIntervalVehicleNumber(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # The maximum jam length in meters during the current interval
+                print("JamInMeters: " + str(traci.lanearea.getIntervalMaxJamLengthInMeters(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # The number of vehicles (or persons, if so configured) that passed the detector during the previous interval
+                print("IntervalVehicleNumber: " + str(traci.lanearea.getLastIntervalVehicleNumber(det)))
+                # --------------------------------------------------------------------------------------------------------
+                # The maximum jam length in meters during the previous interval
+                print("LastIntervalVehicleNumber: " + str(traci.lanearea.getLastIntervalMaxJamLengthInMeters(det)))
+                # --------------------------------------------------------------------------------------------------------
+                print("---------------------------------------------------")                        
+                print("CARROS EN ZONA ultimo paso: " + str(traci.lanearea.getLastStepVehicleNumber(det)))
+                print("###################################################")                        
                 
                 
                 """
@@ -104,7 +139,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 print("IDs of the edges:", IDsOfJunctions)
                 """
                 
-                idd = traci.vehicle.getLaneID(vehicles[i])
+                #idd = traci.vehicle.getLaneID(vehicles[i])
                 
                 tlsList = []
                 
@@ -114,7 +149,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                         #https://sumo.dlr.de/docs/TraCI/Traffic_Lights_Value_Retrieval.html#structure_of_compound_object_controlled_links
                         #https://sumo.dlr.de/pydoc/traci._trafficlight.html#TrafficLightDomain-setRedYellowGreenState
                         
-                        if idd in traci.trafficlight.getControlledLanes(trafficlights[k]):
+                        #if idd in traci.trafficlight.getControlledLanes(trafficlights[k]):
                                 
                                 tflight = trafficlights[k]
                                 tl_state = traci.trafficlight.getRedYellowGreenState(trafficlights[k])
@@ -130,16 +165,16 @@ while traci.simulation.getMinExpectedNumber() > 0:
                                 print(trafficlights[k], " --->", \
                                       #Returns the named tl's state as a tuple of light definitions from rRgGyYoO, for red,
                                       #green, yellow, off, where lower case letters mean that the stream has to decelerate
-                                      " TL state: ", traci.trafficlight.getRedYellowGreenState(trafficlights[k]), " |" \
+                                      " TL state: ", traci.trafficlight.getRedYellowGreenState(trafficlights[k]), "\n" \
                                       #Returns the default total duration of the currently active phase in seconds; To obtain the
                                       #remaining duration use (getNextSwitch() - simulation.getTime()); to obtain the spent duration
                                       #subtract the remaining from the total duration
-                                      " TLS phase duration: ", traci.trafficlight.getPhaseDuration(trafficlights[k]), " |" \
+                                      " TLS phase duration: ", traci.trafficlight.getPhaseDuration(trafficlights[k]), "\n" \
                                       #Returns the list of lanes which are controlled by the named traffic light. Returns at least
                                       #one entry for every element of the phase state (signal index)                                
-                                      " Lanes controlled: ", traci.trafficlight.getControlledLanes(trafficlights[k]), " |", \
+                                      " Lanes controlled: ", traci.trafficlight.getControlledLanes(trafficlights[k]), "\n", \
                                       #Returns the complete traffic light program, structure described under data types                                      
-                                      #" TLS Program: ", traci.trafficlight.getCompleteRedYellowGreenDefinition(trafficlights[k]), " |"
+                                      " TLS Program: ", traci.trafficlight.getCompleteRedYellowGreenDefinition(trafficlights[k]), "\n"
                                       #Returns the assumed time (in seconds) at which the tls changes the phase. Please note that
                                       #the time to switch is not relative to current simulation step (the result returned by the query
                                       #will be absolute time, counting from simulation start);
@@ -155,24 +190,15 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 ##---------------------------------------------------------------##
 
 
-                ##----------CONTROL Vehicles and Traffic Lights----------##
-
-                #***SET FUNCTION FOR VEHICLES***
-                #REF: https://sumo.dlr.de/docs/TraCI/Change_Vehicle_State.html
-                NEWSPEED = 15 # value in m/s (15 m/s = 54 km/hr)
-
-                if vehicles[i]=='veh2':
-                        traci.vehicle.setSpeedMode('veh2',0)
-                        traci.vehicle.setSpeed('veh2',NEWSPEED)
-
+                ##----------CONTROL Traffic Lights----------##
 
                 #***SET FUNCTION FOR TRAFFIC LIGHTS***
                 #REF: https://sumo.dlr.de/docs/TraCI/Change_Traffic_Lights_State.html
                 
                 trafficlightduration = [5,37,5,35]
-                trafficsignal = ["GGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGG","GGGGGGGGGGGGGGGGGGGG"]
-                #trafficsignal = ["rrrrrGGGggrrrrrGGGgg", "rrrrryyyyyrrrrryyyyy", "GGGggrrrrrGGGggrrrrr", "yyyyyrrrrryyyyyrrrrr"]
-                #tfl = "cluster_4260917315_5146794610_5146796923_5146796930_5704674780_5704674783_5704674784_5704674787_6589790747_8370171128_8370171143_8427766841_8427766842_8427766845"
+                
+                trafficsignal = ["rrrrrGGGggrrrrrGGGgg", "rrrrryyyyyrrrrryyyyy", "GGGggrrrrrGGGggrrrrr", "yyyyyrrrrryyyyyrrrrr"]
+                
                 tfl = "cluster_1387998613_1387998619_1387998643_1387998651"
                 traci.trafficlight.setPhaseDuration(tfl, trafficlightduration[randrange(4)])
                 traci.trafficlight.setRedYellowGreenState(tfl, trafficsignal[randrange(4)])
@@ -181,15 +207,6 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 
 
 traci.close()
-
-#Generate Excel file
-"""
-columnnames = ['dateandtime', 'vehid', 'coord', 'gpscoord', 'spd', 'edge', 'lane', 'displacement', 'turnAngle', 'nextTLS', \
-                       'tflight', 'tl_state', 'tl_phase_duration', 'tl_lanes_controlled', 'tl_program', 'tl_next_switch']
-dataset = pd.DataFrame(packBigData, index=None, columns=columnnames)
-dataset.to_excel("output.xlsx", index=False)
-time.sleep(5)
-"""
 
 
 
