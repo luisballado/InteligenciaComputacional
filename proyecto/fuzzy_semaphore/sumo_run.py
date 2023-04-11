@@ -96,7 +96,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                         lane_area = det
                         pesado = porcentaje
                         nuevo_estado = False
-                        
+                
                 area_lane = [
                         ["LANE AREA DETECTOR", det],
                         ["AREA SENSOR", str(round(lane_area_length)) + " m"],
@@ -109,10 +109,17 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 
                 print(tabulate(area_lane))
 
+        ######################################
+        ## SABER QUE CARRIL SE LLENO PRIMERO
+        ######################################
+        # PARA TENER UNA COLA
+        ######################################
+        
         #Evaluar en un tiempo que 
         if(pesado>0):
+                print("Ciclos: " + str(semaforo))
                 print("el pesado es: " + lane_area + " con:" + str(pesado))
-                exit()
+                #exit()
         
         #Function descriptions
         #https://sumo.dlr.de/docs/TraCI/Traffic_Lights_Value_Retrieval.html#structure_of_compound_object_controlled_links
@@ -187,7 +194,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 print("*********************rules***************************")
                 print(rules(values))
                                 
-                tiempo = 100
+                tiempo = 50
                 
                 if((len(trafficsignal)-1) <= _siguiente_):
                         _siguiente_ = 0
@@ -196,13 +203,11 @@ while traci.simulation.getMinExpectedNumber() > 0:
                         
                 secuencia = trafficsignal[_siguiente_]
                 semaforo = 0
+
         #alguien que cuente y me diga cuando cambiar de secuencia con el tiempo mas reciente
-        
         traci.trafficlight.setPhaseDuration(tfl, tiempo)
         traci.trafficlight.setRedYellowGreenState(tfl, secuencia)
-
-        
-        
+                
         #conocer el siguiente estado
         semaforo = semaforo + 1
         
