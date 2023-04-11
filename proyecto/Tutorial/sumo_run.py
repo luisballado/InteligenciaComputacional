@@ -15,7 +15,15 @@ sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"]
 
 traci.start(sumoCmd)
 
-semaforo = 0
+semaforo = 0 #contador de ciclos de semaforos
+_siguiente_ = 0 #estado inicial
+tiempo = 50 #tiempo de inicio
+
+tfl = "cluster_1387998613_1387998619_1387998643_1387998651" #cluster a controlar
+
+trafficsignal = ["GGGGGrrrrrrrrrrrrrrr","yyyyyrrrrrrrrrrrrrrr","rrrrrGGGGGrrrrrrrrrr",
+                         "rrrrryyyyyrrrrrrrrrr","rrrrrrrrrrGGGGGrrrrr","rrrrrrrrrryyyyyrrrrr",
+                         "rrrrrrrrrrrrrrrGGGGG","rrrrrrrrrrrrrrryyyyy","rrrrrrrrrrrrrrrrrrrr"]
 
 #mientras exista un vehiculo la simulacion estata activa
 while traci.simulation.getMinExpectedNumber() > 0:
@@ -32,11 +40,11 @@ while traci.simulation.getMinExpectedNumber() > 0:
         # Obtener el listado de las lane areas
         # ('e2_0', 'e2_1', 'e2_2', 'e2_3', 'e2_4', 'e2_5', 'e2_6', 'e2_7')
         detlist = traci.lanearea.getIDList()
-
-        #print([traci.lanearea.getLastStepVehicleNumber(det) for det in detlist])
+        
         #https://sumo.dlr.de/docs/TraCI/Lane_Area_Detector_Value_Retrieval.html
         #para todos los detectarea e2 hacer
         my_dict = {}
+        
         for det in detlist:
                 # Calcular el procentaje real de llenado
                 porcentaje =  (traci.lanearea.getJamLengthMeters(det)/traci.lanearea.getLength(det))*100 
@@ -57,19 +65,20 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 ]
 
                 print(tabulate(area_lane))
-                my_dict[det] = round(porcentaje)
+                #my_dict[det] = round(porcentaje)
 
-        print(my_dict)
+        #print(my_dict)
+
         #Function descriptions
         #https://sumo.dlr.de/docs/TraCI/Traffic_Lights_Value_Retrieval.html#structure_of_compound_object_controlled_links
         #https://sumo.dlr.de/pydoc/traci._trafficlight.html#TrafficLightDomain-setRedYellowGreenState
         # ('cluster_1387998613_1387998619_1387998643_1387998651', 'joinedS_1387904547_1387904574_8302642379_8302642385')
         tflight = traci.trafficlight.getIDList()[0] #tomo el del cluster
-        tl_state = traci.trafficlight.getRedYellowGreenState(tflight)
-        tl_phase_duration = traci.trafficlight.getPhaseDuration(tflight)
+        tl_state = traci.trafficlight.getRedYellowGreenState(tflight)  #tomar estado actual del semaforo
+        tl_phase_duration = traci.trafficlight.getPhaseDuration(tflight) #tomar el tiempo actual del semaforo
         #tl_lanes_controlled = traci.trafficlight.getControlledLanes(trafficlights[0])
-        tl_program = []
-        tl_program = traci.trafficlight.getAllProgramLogics(tflight)
+        #tl_program = []
+        #tl_program = traci.trafficlight.getAllProgramLogics(tflight)
         tl_next_switch = traci.trafficlight.getNextSwitch(tflight)
         
         traffic_lights = [
@@ -88,57 +97,83 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 #actuated/adaptive traffic lights
                 ["Next TLS switch", tl_next_switch]
         ]
-
+        
         print(tabulate(traffic_lights))
 
         #Returns the complete traffic light program, structure described under data types
-        print("TLS Program: ", tl_program)
-        
-        #exit()
-        
+        #print("TLS Program: ", tl_program)
+
         ##----------MACHINE LEARNING CODES/FUNCTIONS HERE----------##
-
+                
         #CALCULAR EL NUEVO TIEMPO
-        _time_ = [15,10,15,10,15,10,15,10,15]
+        _time_ = 20 #[15,10,15,10,15,10,15,10,15]
         #CALCULAR LA NUEVA SECUENCIA
-        '''
-        if(semaforo<100):
-                secuencia = "GGGGGrrrrrrrrrrrrrrr"
-                semaforo = semaforo + 1
-        elif(semaforo<130):
-                secuencia = "yyyyyrrrrrrrrrrrrrrr"
-                semaforo = semaforo + 1
-        elif(semaforo<230):
-                secuencia = "rrrrrGGGGGrrrrrrrrrr"
-                semaforo = semaforo + 1
-        elif(semaforo<260):
-                secuencia = "rrrrryyyyyrrrrrrrrrr"
-                semaforo = semaforo + 1
-        else:
-                semaforo = 0
-        '''
-        #["rrrrrrrrrrrrrrrrrrrr", "rrrrrgggggrrrrrggggg", "rrrrrrrrrrrrrrrrrrrr", "rrrrrrrrrrrrrrrrrrrr"]
 
+        #hacer programa para pasarle tiempo pero debe respetar el ciclo del programa
+        
+        secuencia = trafficsignal[_siguiente_] #inicia con la secuencia [0]
+        
+        #el tiempo me va decir que debo cambiar estado
+        #DEBO PONERLE UNA COLA
+        if(semaforo==tiempo):
+                #calcular nuevo tiempo y pasar nueva secuencia
+                ## CREAR FUZZY LOGIC
+                temp  = Domain("Temperature", -80, 80)
+                hum   = Domain("Humidity", 0, 100)
+                motor = Domain("Speed", 0, 2000)
+                
+                temp.cold = S(0,20)
+                temp.hot = R(15,30)
+                
+                hum.dry = S(20,50)
+                hum.wet = R(40,70)
+                
+                motor.fast = R(1000,1500)
+                motor.slow = ~motor.fast
+        
+                rules = Rule({(temp.hot, hum.dry): motor.fast,
+                              (temp.cold, hum.dry): very(motor.slow),
+                              (temp.hot, hum.wet): very(motor.fast),
+                              (temp.cold, hum.wet): motor.slow,
+                })
+                
+                values = {hum: 45, temp: 22}
+                
+                print("*********************rules***************************")
+                print(rules(values))
+                                
+                tiempo = 100
+                
+                if((len(trafficsignal)-1) <= _siguiente_):
+                        _siguiente_ = 0
+                else:
+                        _siguiente_ = _siguiente_ + 1
+                        
+                secuencia = trafficsignal[_siguiente_]
+                semaforo = 0
+        #alguien que cuente y me diga cuando cambiar de secuencia con el tiempo mas reciente
+        
+        traci.trafficlight.setPhaseDuration(tfl, tiempo)
+        traci.trafficlight.setRedYellowGreenState(tfl, secuencia)
+
+        
+        
+        #conocer el siguiente estado
+        semaforo = semaforo + 1
         
         ##---------------------------------------------------------------##
-        
-        
         ##----------CONTROL Traffic Lights----------##
         
         #***SET FUNCTION FOR TRAFFIC LIGHTS***
         #REF: https://sumo.dlr.de/docs/TraCI/Change_Traffic_Lights_State.html
-        
-        trafficlightduration = _time_
-        
-        trafficsignal = ["GGGGGrrrrrrrrrrrrrrr","yyyyyrrrrrrrrrrrrrrr","rrrrrGGGGGrrrrrrrrrr",
-                         "rrrrryyyyyrrrrrrrrrr","rrrrrrrrrrGGGGGrrrrr","rrrrrrrrrryyyyyrrrrr",
-                         "rrrrrrrrrrrrrrrGGGGG","rrrrrrrrrrrrrrryyyyy","rrrrrrrrrrrrrrrrrrrr"]
 
-        #trafficsignal = secuencia
+        trafficlightduration = tiempo
         
-        tfl = "cluster_1387998613_1387998619_1387998643_1387998651"
-        traci.trafficlight.setPhaseDuration(tfl, trafficlightduration[randrange(8)])
-        traci.trafficlight.setRedYellowGreenState(tfl, trafficsignal[randrange(8)])
+        print("*******************************************")
+        print(trafficsignal)
+        print(traci.trafficlight.getPhaseDuration(tflight))
+        print(trafficlightduration)
+        print("*******************************************")
         
         ##------------------------------------------------------##
         
