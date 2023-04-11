@@ -36,6 +36,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
         #print([traci.lanearea.getLastStepVehicleNumber(det) for det in detlist])
         #https://sumo.dlr.de/docs/TraCI/Lane_Area_Detector_Value_Retrieval.html
         #para todos los detectarea e2 hacer
+        my_dict = {}
         for det in detlist:
                 # Calcular el procentaje real de llenado
                 porcentaje =  (traci.lanearea.getJamLengthMeters(det)/traci.lanearea.getLength(det))*100 
@@ -56,7 +57,9 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 ]
 
                 print(tabulate(area_lane))
-                                
+                my_dict[det] = round(porcentaje)
+
+        print(my_dict)
         #Function descriptions
         #https://sumo.dlr.de/docs/TraCI/Traffic_Lights_Value_Retrieval.html#structure_of_compound_object_controlled_links
         #https://sumo.dlr.de/pydoc/traci._trafficlight.html#TrafficLightDomain-setRedYellowGreenState
@@ -96,24 +99,24 @@ while traci.simulation.getMinExpectedNumber() > 0:
         ##----------MACHINE LEARNING CODES/FUNCTIONS HERE----------##
 
         #CALCULAR EL NUEVO TIEMPO
-        _time_ = 40 #[40,40,40,40]
+        _time_ = [15,10,15,10,15,10,15,10,15]
         #CALCULAR LA NUEVA SECUENCIA
-        
+        '''
         if(semaforo<100):
-                secuencia = "rrrrrGGGrrrrrrrGGGrr"
+                secuencia = "GGGGGrrrrrrrrrrrrrrr"
                 semaforo = semaforo + 1
-        elif(semaforo<200):
-                secuencia = "GGGrrrrrrrGGGrrrrrrr"
+        elif(semaforo<130):
+                secuencia = "yyyyyrrrrrrrrrrrrrrr"
                 semaforo = semaforo + 1
-        elif(semaforo<300):
-                secuencia = "rrryyGGGggrrryyrrGGG"
+        elif(semaforo<230):
+                secuencia = "rrrrrGGGGGrrrrrrrrrr"
                 semaforo = semaforo + 1
-        elif(semaforo<400):
-                secuencia = "rrryyGGGggrrryyrrGGG"
+        elif(semaforo<260):
+                secuencia = "rrrrryyyyyrrrrrrrrrr"
                 semaforo = semaforo + 1
         else:
                 semaforo = 0
-        
+        '''
         #["rrrrrrrrrrrrrrrrrrrr", "rrrrrgggggrrrrrggggg", "rrrrrrrrrrrrrrrrrrrr", "rrrrrrrrrrrrrrrrrrrr"]
 
         
@@ -127,13 +130,15 @@ while traci.simulation.getMinExpectedNumber() > 0:
         
         trafficlightduration = _time_
         
-        #trafficsignal = ["rrrrrGGGggrrrrrGGGgg", "rrrrryyyyyrrrrryyyyy", "GGGggrrrrrGGGggrrrrr", "yyyyyrrrrryyyyyrrrrr"]
-        #trafficsignal = ["rrrrrGGGggrrrrrGGGgg", "rrrrryyyyyrrrrryyyyy", "rrrrrrrrrrrrrrrrrrrr", "rrrrrrrrrrrrrrrrrrrr"]
-        trafficsignal = secuencia
+        trafficsignal = ["GGGGGrrrrrrrrrrrrrrr","yyyyyrrrrrrrrrrrrrrr","rrrrrGGGGGrrrrrrrrrr",
+                         "rrrrryyyyyrrrrrrrrrr","rrrrrrrrrrGGGGGrrrrr","rrrrrrrrrryyyyyrrrrr",
+                         "rrrrrrrrrrrrrrrGGGGG","rrrrrrrrrrrrrrryyyyy","rrrrrrrrrrrrrrrrrrrr"]
+
+        #trafficsignal = secuencia
         
         tfl = "cluster_1387998613_1387998619_1387998643_1387998651"
-        traci.trafficlight.setPhaseDuration(tfl, trafficlightduration)
-        traci.trafficlight.setRedYellowGreenState(tfl, trafficsignal)
+        traci.trafficlight.setPhaseDuration(tfl, trafficlightduration[randrange(8)])
+        traci.trafficlight.setRedYellowGreenState(tfl, trafficsignal[randrange(8)])
         
         ##------------------------------------------------------##
         
