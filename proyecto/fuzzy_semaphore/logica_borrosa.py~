@@ -1,0 +1,3 @@
+from fuzzylogic.classes import Domain, Set, Rule
+from fuzzylogic.hedges import very
+from fuzzylogic.functions import R, S, triangular

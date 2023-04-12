@@ -19,13 +19,7 @@ import traci.constants as tc
 from tabulate import tabulate
 #-------------------------------------------------
 
-# FUZZYLOGIC - https://pypi.org/project/fuzzylogic/
-# pip install fuzzylogic
-#-------------------------------------------------
-from fuzzylogic.classes import Domain, Set, Rule
-from fuzzylogic.hedges import very
-from fuzzylogic.functions import R, S, triangular
-#-------------------------------------------------
+from logica_borrosa import *
 
 #-----------Manejo de banderas---------------------
 # --show True     - Mostrar GUI
@@ -101,6 +95,9 @@ trafficsignal = ["GGGGGrrrrrrrrrrrrrrr","yyyyyrrrrrrrrrrrrrrr","rrrrrrrrrrrrrrrr
 pesado = 0
 lane_area = ''
 nuevo_estado = False
+
+fuzzy = LogicaBorrosa()
+fuzzy.conjuntos()
 
 #mientras exista un vehiculo la simulacion estata activa
 while traci.simulation.getMinExpectedNumber() > 0:
@@ -376,42 +373,11 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 
                 
                 ## CREAR FUZZY LOGIC
-                trafico  = Domain("Jam", 0, 100)
-                espera   = Domain("Waiting", 0, 240)
-                
-                duracion = Domain("Time", 0, 60)
-                
-                trafico.bajo  = S(25,50)
-                trafico.alto  = R(50,75)
-                trafico.medio = triangular(25, 75)
-                
-                espera.bajo  = S(60,120)
-                espera.alto  = R(120,240)
-                espera.medio = triangular(60, 180)
-                
-                duracion.bajo  = S(15,30)
-                duracion.alto  = R(30,60)
-                duracion.medio = triangular(15, 45)
-                
-                rules = Rule({
-                        (trafico.bajo, espera.bajo): duracion.bajo,
-                        (trafico.bajo, espera.medio): duracion.bajo,
-                        (trafico.bajo, espera.alto): duracion.bajo,
-                        (trafico.medio, espera.bajo): duracion.medio,
-                        (trafico.medio, espera.medio): duracion.medio,
-                        (trafico.medio, espera.alto): duracion.medio,
-                        (trafico.alto, espera.bajo): duracion.alto,
-                        (trafico.alto, espera.medio): duracion.alto,
-                        (trafico.alto, espera.alto): duracion.alto
-                })
-
-                values = {trafico: _trafico_, espera: random.randint(10, 100)}
-
-                tiempo = int(rules(values))
+                tiempo = fuzzy.inferencia(tiempo,20)
                 
                 print("*********************rules***************************")
                 print(str(tiempo))
-                                
+                
                 if((len(trafficsignal)-1) <= _siguiente_):
                         _siguiente_ = 0
                 else:
