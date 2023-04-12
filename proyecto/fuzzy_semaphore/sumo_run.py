@@ -1,5 +1,8 @@
 import time, os
 import argparse, sys
+from datetime import datetime
+
+import random
 
 # LIBRERIAS EXTERNAS
 
@@ -21,7 +24,7 @@ from tabulate import tabulate
 #-------------------------------------------------
 from fuzzylogic.classes import Domain, Set, Rule
 from fuzzylogic.hedges import very
-from fuzzylogic.functions import R, S
+from fuzzylogic.functions import R, S, triangular
 #-------------------------------------------------
 
 #-----------Manejo de banderas---------------------
@@ -75,8 +78,15 @@ semaforo = 0
 #estado inicial
 _siguiente_ = 0
 
+#valores de trafico
+_trafico_ = None
+
+#etiqueta de carriles
+carriles = [None,None,None,None]
+
 #tiempo de inicio
-tiempo = 50 
+#tiempo a consider cuando se inicia el sistema
+tiempo = 30 
 
 #cluster a controlar
 tfl = "cluster_1387998613_1387998619_1387998643_1387998651" 
@@ -111,9 +121,9 @@ while traci.simulation.getMinExpectedNumber() > 0:
         #https://sumo.dlr.de/docs/TraCI/Lane_Area_Detector_Value_Retrieval.html
         #para todos los detectarea e2 hacer
         my_dict = {}
-
-        porcentaje_1 = (((traci.lanearea.getJamLengthMeters('e2_7')/traci.lanearea.getLength('e2_7'))*100) +
-                        ((traci.lanearea.getJamLengthMeters('e2_5')/traci.lanearea.getLength('e2_5'))*100)) / 2
+        
+        porcentaje_1 = round((((traci.lanearea.getJamLengthMeters('e2_7')/traci.lanearea.getLength('e2_7'))*100) +
+                        ((traci.lanearea.getJamLengthMeters('e2_5')/traci.lanearea.getLength('e2_5'))*100)) / 2)
         lane_area_length_1 = (traci.lanearea.getLength('e2_7')+traci.lanearea.getLength('e2_5'))/2 
         jam_meters_1 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_7'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_5'))
         prom_velocity_1 = ((traci.lanearea.getLastStepMeanSpeed('e2_7'))+(traci.lanearea.getLastStepMeanSpeed('e2_5')))/2
@@ -123,7 +133,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
         area_lane = [
                 ["LANE AREA DETECTOR", 'e2_7 e2_5'],
                 ["AREA SENSOR", str(round(lane_area_length_1)) + " m"],
-                ["PORCENTAJE LLENO", str(round(porcentaje_1))+" %"],
+                ["PORCENTAJE LLENO", str(porcentaje_1)+" %"],
                 ["JamInMeters", str(round(jam_meters_1,2))],
                 ["VELOCIDAD PROMEDIO", str(prom_velocity_1)+" m/s"],
                 ["#CARROS(LASTSTEP)", str(cars_last_step_1)],
@@ -134,8 +144,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
         print(tabulate(area_lane))
         print('****************************LANE************************************')
         
-        porcentaje_2 = (((traci.lanearea.getJamLengthMeters('e2_2')/traci.lanearea.getLength('e2_2'))*100) +
-                        ((traci.lanearea.getJamLengthMeters('e2_0')/traci.lanearea.getLength('e2_0'))*100)) / 2
+        porcentaje_2 = round((((traci.lanearea.getJamLengthMeters('e2_2')/traci.lanearea.getLength('e2_2'))*100) +
+                        ((traci.lanearea.getJamLengthMeters('e2_0')/traci.lanearea.getLength('e2_0'))*100)) / 2)
         lane_area_length_2 = (traci.lanearea.getLength('e2_2')+traci.lanearea.getLength('e2_0'))/2 
         jam_meters_2 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_2'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_0'))
         prom_velocity_2 = ((traci.lanearea.getLastStepMeanSpeed('e2_2'))+(traci.lanearea.getLastStepMeanSpeed('e2_0')))/2
@@ -145,7 +155,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
         area_lane = [
                 ["LANE AREA DETECTOR", 'e2_2 e2_0'],
                 ["AREA SENSOR", str(round(lane_area_length_2)) + " m"],
-                ["PORCENTAJE LLENO", str(round(porcentaje_2))+" %"],
+                ["PORCENTAJE LLENO", str(porcentaje_2)+" %"],
                 ["JamInMeters", str(round(jam_meters_2,2))],
                 ["VELOCIDAD PROMEDIO", str(prom_velocity_2)+" m/s"],
                 ["#CARROS(LASTSTEP)", str(cars_last_step_2)],
@@ -156,8 +166,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
         print(tabulate(area_lane))
         print('****************************LANE************************************')
         
-        porcentaje_3 = (((traci.lanearea.getJamLengthMeters('e2_6')/traci.lanearea.getLength('e2_6'))*100) +
-                        ((traci.lanearea.getJamLengthMeters('e2_4')/traci.lanearea.getLength('e2_4'))*100)) / 2
+        porcentaje_3 = round((((traci.lanearea.getJamLengthMeters('e2_6')/traci.lanearea.getLength('e2_6'))*100) +
+                        ((traci.lanearea.getJamLengthMeters('e2_4')/traci.lanearea.getLength('e2_4'))*100)) / 2)
         lane_area_length_3 = (traci.lanearea.getLength('e2_6')+traci.lanearea.getLength('e2_4'))/2 
         jam_meters_3 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_6'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_4'))
         prom_velocity_3 = ((traci.lanearea.getLastStepMeanSpeed('e2_6'))+(traci.lanearea.getLastStepMeanSpeed('e2_4')))/2
@@ -167,7 +177,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
         area_lane = [
                 ["LANE AREA DETECTOR", 'e2_6 e2_4'],
                 ["AREA SENSOR", str(round(lane_area_length_3)) + " m"],
-                ["PORCENTAJE LLENO", str(round(porcentaje_3))+" %"],
+                ["PORCENTAJE LLENO", str(porcentaje_3)+" %"],
                 ["JamInMeters", str(round(jam_meters_3,2))],
                 ["VELOCIDAD PROMEDIO", str(prom_velocity_3)+" m/s"],
                 ["#CARROS(LASTSTEP)", str(cars_last_step_3)],
@@ -178,8 +188,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
         print(tabulate(area_lane))
         print('****************************LANE************************************')
 
-        porcentaje_4 = (((traci.lanearea.getJamLengthMeters('e2_1')/traci.lanearea.getLength('e2_1'))*100) +
-                        ((traci.lanearea.getJamLengthMeters('e2_3')/traci.lanearea.getLength('e2_3'))*100)) / 2
+        porcentaje_4 = round((((traci.lanearea.getJamLengthMeters('e2_1')/traci.lanearea.getLength('e2_1'))*100) +((traci.lanearea.getJamLengthMeters('e2_3')/traci.lanearea.getLength('e2_3'))*100)) / 2)
         lane_area_length_4 = (traci.lanearea.getLength('e2_1')+traci.lanearea.getLength('e2_3'))/2 
         jam_meters_4 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_1'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_3'))
         prom_velocity_4 = ((traci.lanearea.getLastStepMeanSpeed('e2_1'))+(traci.lanearea.getLastStepMeanSpeed('e2_3')))/2
@@ -189,7 +198,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
         area_lane = [
                 ["LANE AREA DETECTOR", 'e2_1 e2_3'],
                 ["AREA SENSOR", str(round(lane_area_length_4)) + " m"],
-                ["PORCENTAJE LLENO", str(round(porcentaje_4))+" %"],
+                ["PORCENTAJE LLENO", str(porcentaje_4)+" %"],
                 ["JamInMeters", str(round(jam_meters_4,2))],
                 ["VELOCIDAD PROMEDIO", str(prom_velocity_4)+" m/s"],
                 ["#CARROS(LASTSTEP)", str(cars_last_step_4)],
@@ -233,7 +242,6 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 
                 print(tabulate(area_lane))
         """
-        
         ######################################
         ## SABER QUE CARRIL SE LLENO PRIMERO
         ######################################
@@ -283,53 +291,136 @@ while traci.simulation.getMinExpectedNumber() > 0:
         ##----------MACHINE LEARNING CODES/FUNCTIONS HERE----------##
                 
         #CALCULAR EL NUEVO TIEMPO
-        _time_ = 20 #[15,10,15,10,15,10,15,10,15]
-        #CALCULAR LA NUEVA SECUENCIA
+        #_time_ = 20
 
-        #hacer programa para pasarle tiempo pero debe respetar el ciclo del programa
+        #CALCULAR LA NUEVA SECUENCIA
         
-        secuencia = trafficsignal[_siguiente_] #inicia con la secuencia [0]
+        #inicia con la primer secuencia [0]
+        secuencia = trafficsignal[_siguiente_]
         
         #el tiempo me va decir que debo cambiar estado
         #DEBO PONERLE UNA COLA
         if(semaforo==tiempo):
                 #calcular nuevo tiempo y pasar nueva secuencia
+
+                #/////////////////////////////////////////////////////////
+                # SABER QUE TRAFICO TIENE EL SIGUIENTE
+                #/////////////////////////////////////////////////////////
+
+                espera = 0
+                ahora = datetime.now()
+                
+                if(_siguiente_ == 0):
+                        #modificar el tiempo del carril 0
+                        #ver si ya pase por aqui, si no poner el datetime actual
+                        _trafico_ = porcentaje_1
+                        
+                        if(carriles[0] is None):
+                                carriles[0] = ahora
+                        else:
+                                espera = (ahora - carriles[0]).seconds
+                                carriles[0] = ahora
+
+                                print("######ESPERA#######")
+                                print(ahora)
+                                print(carriles[0])
+                                print("carril: " + str(_siguiente_) + " tiempo: " + str(espera))
+                                print("######ESPERA#######")
+
+                elif(_siguiente_ == 3):
+                        #modificar el tiempo del carril 3
+                        _trafico_ = porcentaje_2
+                        if(carriles[1] is None):
+                                carriles[1] = ahora
+                        else:
+                                espera = (ahora - carriles[1]).seconds
+                                carriles[1] = ahora
+
+                                print("######ESPERA#######")
+                                print(ahora)
+                                print(carriles[0])
+                                print("carril: " + str(_siguiente_) + " tiempo: " + str(espera))
+                                print("######ESPERA#######")
+                        
+                elif(_siguiente_ == 6):
+                        #modificar el tiempo del carril 6
+                        _trafico_ = porcentaje_3
+                        if(carriles[2] is None):
+                                carriles[2] = ahora
+                        else:
+                                espera = (ahora - carriles[2]).seconds
+                                carriles[2] = ahora
+
+                                print("######ESPERA#######")
+                                print(ahora)
+                                print(carriles[0])
+                                print("carril: " + str(_siguiente_) + " tiempo: " + str(espera))
+                                print("######ESPERA#######")
+                                
+
+                elif(_siguiente_ == 9):
+                        #modificar el tiempo del carril 9
+                        _trafico_ = porcentaje_4
+                        if(carriles[3] is None):
+                                carriles[3] = ahora
+                        else:
+                                espera = (ahora - carriles[3]).seconds
+                                carriles[3] = ahora
+
+                                print("######ESPERA#######")
+                                print(ahora)
+                                print(carriles[0])
+                                print("carril: " + str(_siguiente_) + " tiempo: " + str(espera))
+                                print("######ESPERA#######")
+
+                
+                
                 ## CREAR FUZZY LOGIC
-                temp  = Domain("Temperature", -80, 80)
-                hum   = Domain("Humidity", 0, 100)
-                motor = Domain("Speed", 0, 2000)
+                trafico  = Domain("Jam", 0, 100)
+                espera   = Domain("Waiting", 0, 240)
                 
-                temp.cold = S(0,20)
-                temp.hot = R(15,30)
+                duracion = Domain("Time", 0, 60)
                 
-                hum.dry = S(20,50)
-                hum.wet = R(40,70)
+                trafico.bajo  = S(25,50)
+                trafico.alto  = R(50,75)
+                trafico.medio = triangular(25, 75)
                 
-                motor.fast = R(1000,1500)
-                motor.slow = ~motor.fast
-        
-                rules = Rule({(temp.hot, hum.dry): motor.fast,
-                              (temp.cold, hum.dry): very(motor.slow),
-                              (temp.hot, hum.wet): very(motor.fast),
-                              (temp.cold, hum.wet): motor.slow,
+                espera.bajo  = S(60,120)
+                espera.alto  = R(120,240)
+                espera.medio = triangular(60, 180)
+                
+                duracion.bajo  = S(15,30)
+                duracion.alto  = R(30,60)
+                duracion.medio = triangular(15, 45)
+                
+                rules = Rule({
+                        (trafico.bajo, espera.bajo): duracion.bajo,
+                        (trafico.bajo, espera.medio): duracion.bajo,
+                        (trafico.bajo, espera.alto): duracion.bajo,
+                        (trafico.medio, espera.bajo): duracion.medio,
+                        (trafico.medio, espera.medio): duracion.medio,
+                        (trafico.medio, espera.alto): duracion.medio,
+                        (trafico.alto, espera.bajo): duracion.alto,
+                        (trafico.alto, espera.medio): duracion.alto,
+                        (trafico.alto, espera.alto): duracion.alto
                 })
-                
-                values = {hum: 45, temp: 22}
+
+                values = {trafico: _trafico_, espera: random.randint(10, 100)}
+
+                tiempo = int(rules(values))
                 
                 print("*********************rules***************************")
-                print(rules(values))
+                print(str(tiempo))
                                 
-                tiempo = 50
-                
                 if((len(trafficsignal)-1) <= _siguiente_):
                         _siguiente_ = 0
                 else:
                         _siguiente_ = _siguiente_ + 1
                         
                 secuencia = trafficsignal[_siguiente_]
-                
-                semaforo = 0
 
+                semaforo = 0                
+                
                 #PONER BARRERAS DE TIEMPO PARA AMARILLO Y ROJO
                 if("yyyyy" in secuencia or "rrrrrrrrrrrrrrrrrrrr" in secuencia):
                         tiempo = 5
