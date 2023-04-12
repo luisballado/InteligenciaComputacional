@@ -26,14 +26,36 @@ from fuzzylogic.functions import R, S
 
 parser = argparse.ArgumentParser()
 parser.add_argument("--show", help="Mostrar la interfaz de SUMO | True - para mostrar | False - para no mostrar")
+parser.add_argument("--traffic", help="Modificar la carga de trafico - Bajo | Medio | Alto")
 args = parser.parse_args()
+
+#sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"]
+
+sumoCmd = []
 
 #levantar sumo
 if (args.show == 'True'):
-        sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"]
+        sumoCmd.append("sumo-gui")
+        sumoCmd.append("-c")
+        sumoCmd.append("victoria_cluster.sumocfg")
 else:
         print("SE MOSTRARA SIN INTERFAZ GRAFICA")
-        sumoCmd = ["sumo", "-c", "victoria_cluster.sumocfg"]
+        sumoCmd.append("sumo")
+        sumoCmd.append("-c")
+        sumoCmd.append("victoria_cluster.sumocfg")
+        
+if(args.traffic == 'Bajo'):
+        sumoCmd.append("-r")
+        sumoCmd.append("victoria_cluster_ligero.rou.xml")
+
+if(args.traffic == 'Medio'):
+        sumoCmd.append("-r")
+        sumoCmd.append("victoria_cluster_medio.rou.xml")
+
+if(args.traffic == 'Alto'):
+        sumoCmd.append("-r")
+        sumoCmd.append("victoria_cluster_pesado.rou.xml")
+        
 
 traci.start(sumoCmd)
 
@@ -202,8 +224,12 @@ while traci.simulation.getMinExpectedNumber() > 0:
                         _siguiente_ = _siguiente_ + 1
                         
                 secuencia = trafficsignal[_siguiente_]
+                
                 semaforo = 0
 
+                if("yyyyy" in secuencia):
+                        tiempo = 10
+                
         #alguien que cuente y me diga cuando cambiar de secuencia con el tiempo mas reciente
         traci.trafficlight.setPhaseDuration(tfl, tiempo)
         traci.trafficlight.setRedYellowGreenState(tfl, secuencia)
