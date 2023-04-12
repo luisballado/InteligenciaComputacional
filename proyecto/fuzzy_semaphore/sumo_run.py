@@ -24,10 +24,17 @@ from fuzzylogic.hedges import very
 from fuzzylogic.functions import R, S
 #-------------------------------------------------
 
+#-----------Manejo de banderas---------------------
+# --show True     - Mostrar GUI
+# --show False    - Mostrar GUI
+# --traffic Bajo  - Flujo bajo de trafico
+# --traffic Medio - Flujo medio de trafico
+# --traffic Alto  - Flujo alto de trafico
 parser = argparse.ArgumentParser()
 parser.add_argument("--show", help="Mostrar la interfaz de SUMO | True - para mostrar | False - para no mostrar")
 parser.add_argument("--traffic", help="Modificar la carga de trafico - Bajo | Medio | Alto")
 args = parser.parse_args()
+#-------------------------------------------------
 
 #sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"] #Comando directo
 
@@ -45,7 +52,8 @@ else:
         sumoCmd.append("victoria_cluster.sumocfg")
 #------------------------------------------------------------
         
-#----------------DEFINIR TRAFICO-----------------------------
+#----------------DEFINIR TRAFICO-----------------------------------
+# Si no se define trafico, se toma el que se encuentra por default 
 if(args.traffic == 'Bajo'):
         sumoCmd.append("-r")
         sumoCmd.append("victoria_cluster_ligero.rou.xml")
@@ -57,7 +65,7 @@ if(args.traffic == 'Medio'):
 if(args.traffic == 'Alto'):
         sumoCmd.append("-r")
         sumoCmd.append("victoria_cluster_pesado.rou.xml")
-#------------------------------------------------------------
+#------------------------------------------------------------------
 
 traci.start(sumoCmd)
 
@@ -104,7 +112,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
         #para todos los detectarea e2 hacer
         my_dict = {}
 
-        porcentaje_1 = (((traci.lanearea.getJamLengthMeters('e2_7')/traci.lanearea.getLength('e2_7'))*100) + ((traci.lanearea.getJamLengthMeters('e2_5')/traci.lanearea.getLength('e2_5'))*100)) / 2
+        porcentaje_1 = (((traci.lanearea.getJamLengthMeters('e2_7')/traci.lanearea.getLength('e2_7'))*100) +
+                        ((traci.lanearea.getJamLengthMeters('e2_5')/traci.lanearea.getLength('e2_5'))*100)) / 2
         lane_area_length_1 = (traci.lanearea.getLength('e2_7')+traci.lanearea.getLength('e2_5'))/2 
         jam_meters_1 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_7'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_5'))
         prom_velocity_1 = ((traci.lanearea.getLastStepMeanSpeed('e2_7'))+(traci.lanearea.getLastStepMeanSpeed('e2_5')))/2
@@ -125,7 +134,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
         print(tabulate(area_lane))
         print('****************************LANE************************************')
         
-        porcentaje_2 = (((traci.lanearea.getJamLengthMeters('e2_2')/traci.lanearea.getLength('e2_2'))*100) + ((traci.lanearea.getJamLengthMeters('e2_0')/traci.lanearea.getLength('e2_0'))*100)) / 2
+        porcentaje_2 = (((traci.lanearea.getJamLengthMeters('e2_2')/traci.lanearea.getLength('e2_2'))*100) +
+                        ((traci.lanearea.getJamLengthMeters('e2_0')/traci.lanearea.getLength('e2_0'))*100)) / 2
         lane_area_length_2 = (traci.lanearea.getLength('e2_2')+traci.lanearea.getLength('e2_0'))/2 
         jam_meters_2 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_2'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_0'))
         prom_velocity_2 = ((traci.lanearea.getLastStepMeanSpeed('e2_2'))+(traci.lanearea.getLastStepMeanSpeed('e2_0')))/2
@@ -146,7 +156,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
         print(tabulate(area_lane))
         print('****************************LANE************************************')
         
-        porcentaje_3 = (((traci.lanearea.getJamLengthMeters('e2_6')/traci.lanearea.getLength('e2_6'))*100) + ((traci.lanearea.getJamLengthMeters('e2_4')/traci.lanearea.getLength('e2_4'))*100)) / 2
+        porcentaje_3 = (((traci.lanearea.getJamLengthMeters('e2_6')/traci.lanearea.getLength('e2_6'))*100) +
+                        ((traci.lanearea.getJamLengthMeters('e2_4')/traci.lanearea.getLength('e2_4'))*100)) / 2
         lane_area_length_3 = (traci.lanearea.getLength('e2_6')+traci.lanearea.getLength('e2_4'))/2 
         jam_meters_3 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_6'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_4'))
         prom_velocity_3 = ((traci.lanearea.getLastStepMeanSpeed('e2_6'))+(traci.lanearea.getLastStepMeanSpeed('e2_4')))/2
@@ -167,7 +178,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
         print(tabulate(area_lane))
         print('****************************LANE************************************')
 
-        porcentaje_4 = (((traci.lanearea.getJamLengthMeters('e2_1')/traci.lanearea.getLength('e2_1'))*100) + ((traci.lanearea.getJamLengthMeters('e2_3')/traci.lanearea.getLength('e2_3'))*100)) / 2
+        porcentaje_4 = (((traci.lanearea.getJamLengthMeters('e2_1')/traci.lanearea.getLength('e2_1'))*100) +
+                        ((traci.lanearea.getJamLengthMeters('e2_3')/traci.lanearea.getLength('e2_3'))*100)) / 2
         lane_area_length_4 = (traci.lanearea.getLength('e2_1')+traci.lanearea.getLength('e2_3'))/2 
         jam_meters_4 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_1'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_3'))
         prom_velocity_4 = ((traci.lanearea.getLastStepMeanSpeed('e2_1'))+(traci.lanearea.getLastStepMeanSpeed('e2_3')))/2
@@ -187,7 +199,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
         print('****************************LANE************************************')
         print(tabulate(area_lane))
         print('****************************LANE************************************')
-
+                
         """
         for det in detlist:
 

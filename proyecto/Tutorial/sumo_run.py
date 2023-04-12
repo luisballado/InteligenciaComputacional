@@ -15,15 +15,20 @@ sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"]
 
 traci.start(sumoCmd)
 
-semaforo = 0 #contador de ciclos de semaforos
-_siguiente_ = 0 #estado inicial
-tiempo = 50 #tiempo de inicio
+#contador de ciclos de semaforos
+semaforo = 0
+#estado inicial
+_siguiente_ = 0
+#tiempo de inicio
+tiempo = 50 
 
-tfl = "cluster_1387998613_1387998619_1387998643_1387998651" #cluster a controlar
+#cluster a controlar
+tfl = "cluster_1387998613_1387998619_1387998643_1387998651" 
 
+#ciclo de semaforo propuesto
 trafficsignal = ["GGGGGrrrrrrrrrrrrrrr","yyyyyrrrrrrrrrrrrrrr","rrrrrGGGGGrrrrrrrrrr",
-                         "rrrrryyyyyrrrrrrrrrr","rrrrrrrrrrGGGGGrrrrr","rrrrrrrrrryyyyyrrrrr",
-                         "rrrrrrrrrrrrrrrGGGGG","rrrrrrrrrrrrrrryyyyy","rrrrrrrrrrrrrrrrrrrr"]
+                 "rrrrryyyyyrrrrrrrrrr","rrrrrrrrrrGGGGGrrrrr","rrrrrrrrrryyyyyrrrrr",
+                 "rrrrrrrrrrrrrrrGGGGG","rrrrrrrrrrrrrrryyyyy"]
 
 #mientras exista un vehiculo la simulacion estata activa
 while traci.simulation.getMinExpectedNumber() > 0:
@@ -141,7 +146,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 
                 print("*********************rules***************************")
                 print(rules(values))
-                                
+                
                 tiempo = 100
                 
                 if((len(trafficsignal)-1) <= _siguiente_):
@@ -150,6 +155,11 @@ while traci.simulation.getMinExpectedNumber() > 0:
                         _siguiente_ = _siguiente_ + 1
                         
                 secuencia = trafficsignal[_siguiente_]
+
+                #Si la secuencia siguiente es el amarillo no hacer lo de la maquina de inferencia
+                if("yyyyy" in secuencia):
+                        tiempo = 20
+                
                 semaforo = 0
         #alguien que cuente y me diga cuando cambiar de secuencia con el tiempo mas reciente
         
