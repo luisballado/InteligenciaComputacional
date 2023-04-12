@@ -29,11 +29,11 @@ parser.add_argument("--show", help="Mostrar la interfaz de SUMO | True - para mo
 parser.add_argument("--traffic", help="Modificar la carga de trafico - Bajo | Medio | Alto")
 args = parser.parse_args()
 
-#sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"]
+#sumoCmd = ["sumo-gui", "-c", "victoria_cluster.sumocfg"] #Comando directo
 
 sumoCmd = []
 
-#levantar sumo
+#----------------LEVATAR SUMO--------------------------------
 if (args.show == 'True'):
         sumoCmd.append("sumo-gui")
         sumoCmd.append("-c")
@@ -43,7 +43,9 @@ else:
         sumoCmd.append("sumo")
         sumoCmd.append("-c")
         sumoCmd.append("victoria_cluster.sumocfg")
+#------------------------------------------------------------
         
+#----------------DEFINIR TRAFICO-----------------------------
 if(args.traffic == 'Bajo'):
         sumoCmd.append("-r")
         sumoCmd.append("victoria_cluster_ligero.rou.xml")
@@ -55,7 +57,7 @@ if(args.traffic == 'Medio'):
 if(args.traffic == 'Alto'):
         sumoCmd.append("-r")
         sumoCmd.append("victoria_cluster_pesado.rou.xml")
-        
+#------------------------------------------------------------
 
 traci.start(sumoCmd)
 
@@ -72,9 +74,11 @@ tiempo = 50
 tfl = "cluster_1387998613_1387998619_1387998643_1387998651" 
 
 #ciclo de semaforo propuesto
-trafficsignal = ["GGGGGrrrrrrrrrrrrrrr","yyyyyrrrrrrrrrrrrrrr","rrrrrGGGGGrrrrrrrrrr",
-                 "rrrrryyyyyrrrrrrrrrr","rrrrrrrrrrGGGGGrrrrr","rrrrrrrrrryyyyyrrrrr",
-                 "rrrrrrrrrrrrrrrGGGGG","rrrrrrrrrrrrrrryyyyy"]
+trafficsignal = ["GGGGGrrrrrrrrrrrrrrr","yyyyyrrrrrrrrrrrrrrr","rrrrrrrrrrrrrrrrrrrr",
+                 "rrrrrGGGGGrrrrrrrrrr","rrrrryyyyyrrrrrrrrrr","rrrrrrrrrrrrrrrrrrrr",
+                 "rrrrrrrrrrGGGGGrrrrr","rrrrrrrrrryyyyyrrrrr","rrrrrrrrrrrrrrrrrrrr",
+                 "rrrrrrrrrrrrrrrGGGGG","rrrrrrrrrrrrrrryyyyy","rrrrrrrrrrrrrrrrrrrr"
+]
         
 pesado = 0
 lane_area = ''
@@ -99,8 +103,94 @@ while traci.simulation.getMinExpectedNumber() > 0:
         #https://sumo.dlr.de/docs/TraCI/Lane_Area_Detector_Value_Retrieval.html
         #para todos los detectarea e2 hacer
         my_dict = {}
+
+        porcentaje_1 = (((traci.lanearea.getJamLengthMeters('e2_7')/traci.lanearea.getLength('e2_7'))*100) + ((traci.lanearea.getJamLengthMeters('e2_5')/traci.lanearea.getLength('e2_5'))*100)) / 2
+        lane_area_length_1 = (traci.lanearea.getLength('e2_7')+traci.lanearea.getLength('e2_5'))/2 
+        jam_meters_1 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_7'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_5'))
+        prom_velocity_1 = ((traci.lanearea.getLastStepMeanSpeed('e2_7'))+(traci.lanearea.getLastStepMeanSpeed('e2_5')))/2
+        cars_last_step_1 = ((traci.lanearea.getLastStepVehicleNumber('e2_7'))+(traci.lanearea.getLastStepVehicleNumber('e2_5')))
+        cars_in_jam_1 = ((traci.lanearea.getJamLengthVehicle('e2_7'))+(traci.lanearea.getJamLengthVehicle('e2_5')))
+
+        area_lane = [
+                ["LANE AREA DETECTOR", 'e2_7 e2_5'],
+                ["AREA SENSOR", str(round(lane_area_length_1)) + " m"],
+                ["PORCENTAJE LLENO", str(round(porcentaje_1))+" %"],
+                ["JamInMeters", str(round(jam_meters_1,2))],
+                ["VELOCIDAD PROMEDIO", str(prom_velocity_1)+" m/s"],
+                ["#CARROS(LASTSTEP)", str(cars_last_step_1)],
+                ["#CARROS (TRAFICO): ", str(cars_in_jam_1)]
+        ]
+
+        print('****************************LANE************************************')
+        print(tabulate(area_lane))
+        print('****************************LANE************************************')
         
+        porcentaje_2 = (((traci.lanearea.getJamLengthMeters('e2_2')/traci.lanearea.getLength('e2_2'))*100) + ((traci.lanearea.getJamLengthMeters('e2_0')/traci.lanearea.getLength('e2_0'))*100)) / 2
+        lane_area_length_2 = (traci.lanearea.getLength('e2_2')+traci.lanearea.getLength('e2_0'))/2 
+        jam_meters_2 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_2'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_0'))
+        prom_velocity_2 = ((traci.lanearea.getLastStepMeanSpeed('e2_2'))+(traci.lanearea.getLastStepMeanSpeed('e2_0')))/2
+        cars_last_step_2 = ((traci.lanearea.getLastStepVehicleNumber('e2_2'))+(traci.lanearea.getLastStepVehicleNumber('e2_0')))
+        cars_in_jam_2 = ((traci.lanearea.getJamLengthVehicle('e2_2'))+(traci.lanearea.getJamLengthVehicle('e2_0')))
+
+        area_lane = [
+                ["LANE AREA DETECTOR", 'e2_2 e2_0'],
+                ["AREA SENSOR", str(round(lane_area_length_2)) + " m"],
+                ["PORCENTAJE LLENO", str(round(porcentaje_2))+" %"],
+                ["JamInMeters", str(round(jam_meters_2,2))],
+                ["VELOCIDAD PROMEDIO", str(prom_velocity_2)+" m/s"],
+                ["#CARROS(LASTSTEP)", str(cars_last_step_2)],
+                ["#CARROS (TRAFICO): ", str(cars_in_jam_2)]
+        ]
+
+        print('****************************LANE************************************')
+        print(tabulate(area_lane))
+        print('****************************LANE************************************')
+        
+        porcentaje_3 = (((traci.lanearea.getJamLengthMeters('e2_6')/traci.lanearea.getLength('e2_6'))*100) + ((traci.lanearea.getJamLengthMeters('e2_4')/traci.lanearea.getLength('e2_4'))*100)) / 2
+        lane_area_length_3 = (traci.lanearea.getLength('e2_6')+traci.lanearea.getLength('e2_4'))/2 
+        jam_meters_3 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_6'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_4'))
+        prom_velocity_3 = ((traci.lanearea.getLastStepMeanSpeed('e2_6'))+(traci.lanearea.getLastStepMeanSpeed('e2_4')))/2
+        cars_last_step_3 = ((traci.lanearea.getLastStepVehicleNumber('e2_6'))+(traci.lanearea.getLastStepVehicleNumber('e2_4')))
+        cars_in_jam_3 = ((traci.lanearea.getJamLengthVehicle('e2_6'))+(traci.lanearea.getJamLengthVehicle('e2_4')))
+
+        area_lane = [
+                ["LANE AREA DETECTOR", 'e2_6 e2_4'],
+                ["AREA SENSOR", str(round(lane_area_length_3)) + " m"],
+                ["PORCENTAJE LLENO", str(round(porcentaje_3))+" %"],
+                ["JamInMeters", str(round(jam_meters_3,2))],
+                ["VELOCIDAD PROMEDIO", str(prom_velocity_3)+" m/s"],
+                ["#CARROS(LASTSTEP)", str(cars_last_step_3)],
+                ["#CARROS (TRAFICO): ", str(cars_in_jam_3)]
+        ]
+
+        print('****************************LANE************************************')
+        print(tabulate(area_lane))
+        print('****************************LANE************************************')
+
+        porcentaje_4 = (((traci.lanearea.getJamLengthMeters('e2_1')/traci.lanearea.getLength('e2_1'))*100) + ((traci.lanearea.getJamLengthMeters('e2_3')/traci.lanearea.getLength('e2_3'))*100)) / 2
+        lane_area_length_4 = (traci.lanearea.getLength('e2_1')+traci.lanearea.getLength('e2_3'))/2 
+        jam_meters_4 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_1'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_3'))
+        prom_velocity_4 = ((traci.lanearea.getLastStepMeanSpeed('e2_1'))+(traci.lanearea.getLastStepMeanSpeed('e2_3')))/2
+        cars_last_step_4 = ((traci.lanearea.getLastStepVehicleNumber('e2_1'))+(traci.lanearea.getLastStepVehicleNumber('e2_3')))
+        cars_in_jam_4 = ((traci.lanearea.getJamLengthVehicle('e2_1'))+(traci.lanearea.getJamLengthVehicle('e2_3')))
+
+        area_lane = [
+                ["LANE AREA DETECTOR", 'e2_1 e2_3'],
+                ["AREA SENSOR", str(round(lane_area_length_4)) + " m"],
+                ["PORCENTAJE LLENO", str(round(porcentaje_4))+" %"],
+                ["JamInMeters", str(round(jam_meters_4,2))],
+                ["VELOCIDAD PROMEDIO", str(prom_velocity_4)+" m/s"],
+                ["#CARROS(LASTSTEP)", str(cars_last_step_4)],
+                ["#CARROS (TRAFICO): ", str(cars_in_jam_4)]
+        ]
+
+        print('****************************LANE************************************')
+        print(tabulate(area_lane))
+        print('****************************LANE************************************')
+
+        """
         for det in detlist:
+
                 # Calcular el procentaje real de llenado
                 porcentaje =  (traci.lanearea.getJamLengthMeters(det)/traci.lanearea.getLength(det))*100 
                 lane_area_length = traci.lanearea.getLength(det)
@@ -130,7 +220,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 ]
                 
                 print(tabulate(area_lane))
-
+        """
+        
         ######################################
         ## SABER QUE CARRIL SE LLENO PRIMERO
         ######################################
@@ -227,9 +318,10 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 
                 semaforo = 0
 
-                if("yyyyy" in secuencia):
-                        tiempo = 10
-                
+                #PONER BARRERAS DE TIEMPO PARA AMARILLO Y ROJO
+                if("yyyyy" in secuencia or "rrrrrrrrrrrrrrrrrrrr" in secuencia):
+                        tiempo = 5
+
         #alguien que cuente y me diga cuando cambiar de secuencia con el tiempo mas reciente
         traci.trafficlight.setPhaseDuration(tfl, tiempo)
         traci.trafficlight.setRedYellowGreenState(tfl, secuencia)
@@ -245,12 +337,12 @@ while traci.simulation.getMinExpectedNumber() > 0:
 
         trafficlightduration = tiempo
 
-        print("*******************************************")
+        print("##############################################")
         print(trafficsignal)
         print(traci.trafficlight.getPhaseDuration(tflight))
         print(trafficlightduration)
-        print("*******************************************")
-        
+        print("##############################################")
+                
         ##------------------------------------------------------##
         
 traci.close() #cerrar interfaz
