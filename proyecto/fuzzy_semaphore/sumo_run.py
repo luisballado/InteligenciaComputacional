@@ -4,6 +4,14 @@ from datetime import datetime
 
 import random
 
+############################################################
+#####################CORRER PROGRAMA########################
+############################################################
+# $ python3 sumo_run.py --show True --traffic Bajo
+# $ python3 sumo_run.py --show True --traffic Medio
+# $ python3 sumo_run.py --show True --traffic Alto
+############################################################
+
 # LIBRERIAS EXTERNAS
 
 # TRACI - https://pypi.org/project/traci/
@@ -85,7 +93,9 @@ tiempo = 30
 #cluster a controlar
 tfl = "cluster_1387998613_1387998619_1387998643_1387998651" 
 
-#ciclo de semaforo propuesto
+# ciclo de semaforo propuesto
+# Los cada 5 caracteres es un semafor
+# Los semaforos estan ordenados a favor de las manecillas del reloj
 trafficsignal = ["GGGGGrrrrrrrrrrrrrrr","yyyyyrrrrrrrrrrrrrrr","rrrrrrrrrrrrrrrrrrrr",
                  "rrrrrGGGGGrrrrrrrrrr","rrrrryyyyyrrrrrrrrrr","rrrrrrrrrrrrrrrrrrrr",
                  "rrrrrrrrrrGGGGGrrrrr","rrrrrrrrrryyyyyrrrrr","rrrrrrrrrrrrrrrrrrrr",
@@ -139,8 +149,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
 
         print('****************************LANE************************************')
         print(tabulate(area_lane))
-        print('****************************LANE************************************')
-        
+        print('********************************************************************')
+                
         porcentaje_2 = round((((traci.lanearea.getJamLengthMeters('e2_2')/traci.lanearea.getLength('e2_2'))*100) +
                         ((traci.lanearea.getJamLengthMeters('e2_0')/traci.lanearea.getLength('e2_0'))*100)) / 2)
         lane_area_length_2 = (traci.lanearea.getLength('e2_2')+traci.lanearea.getLength('e2_0'))/2 
@@ -161,7 +171,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
 
         print('****************************LANE************************************')
         print(tabulate(area_lane))
-        print('****************************LANE************************************')
+        print('********************************************************************')
         
         porcentaje_3 = round((((traci.lanearea.getJamLengthMeters('e2_6')/traci.lanearea.getLength('e2_6'))*100) +
                         ((traci.lanearea.getJamLengthMeters('e2_4')/traci.lanearea.getLength('e2_4'))*100)) / 2)
@@ -183,8 +193,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
 
         print('****************************LANE************************************')
         print(tabulate(area_lane))
-        print('****************************LANE************************************')
-
+        print('********************************************************************')
+        
         porcentaje_4 = round((((traci.lanearea.getJamLengthMeters('e2_1')/traci.lanearea.getLength('e2_1'))*100) +((traci.lanearea.getJamLengthMeters('e2_3')/traci.lanearea.getLength('e2_3'))*100)) / 2)
         lane_area_length_4 = (traci.lanearea.getLength('e2_1')+traci.lanearea.getLength('e2_3'))/2 
         jam_meters_4 = max(traci.lanearea.getIntervalMaxJamLengthInMeters('e2_1'),traci.lanearea.getIntervalMaxJamLengthInMeters('e2_3'))
@@ -204,8 +214,8 @@ while traci.simulation.getMinExpectedNumber() > 0:
 
         print('****************************LANE************************************')
         print(tabulate(area_lane))
-        print('****************************LANE************************************')
-                
+        print('********************************************************************')
+                        
         """
         for det in detlist:
 
