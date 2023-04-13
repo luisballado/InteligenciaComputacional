@@ -25,9 +25,9 @@ class LogicaBorrosa:
         self.espera.alto  = R(120,240)
         self.espera.medio = triangular(60, 180)
         
-        self.duracion.bajo  = S(15,30)
-        self.duracion.alto  = R(30,60)
-        self.duracion.medio = triangular(15, 45)
+        self.duracion.bajo  = S(10,20)
+        self.duracion.alto  = R(20,30)
+        self.duracion.medio = triangular(10, 30)
 
     #Reglas de Inferencia
     def inferencia(self,traffic_data,time_data):

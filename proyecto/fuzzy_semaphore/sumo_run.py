@@ -106,6 +106,11 @@ pesado = 0
 lane_area = ''
 nuevo_estado = False
 
+sem_1 = 0
+sem_2 = 0
+sem_3 = 0
+sem_4 = 0
+
 fuzzy = LogicaBorrosa()
 fuzzy.conjuntos()
 
@@ -249,18 +254,11 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 
                 print(tabulate(area_lane))
         """
+        
         ######################################
         ## SABER QUE CARRIL SE LLENO PRIMERO
         ######################################
-        # PARA TENER UNA COLA
-        ######################################
-        
-        #Evaluar en un tiempo que 
-        if(pesado>0):
-                print("Ciclos: " + str(semaforo))
-                print("el pesado es: " + lane_area + " con:" + str(pesado))
-                #exit()
-        
+                
         #Function descriptions
         #https://sumo.dlr.de/docs/TraCI/Traffic_Lights_Value_Retrieval.html#structure_of_compound_object_controlled_links
         #https://sumo.dlr.de/pydoc/traci._trafficlight.html#TrafficLightDomain-setRedYellowGreenState
@@ -308,6 +306,12 @@ while traci.simulation.getMinExpectedNumber() > 0:
         #el tiempo me va decir que debo cambiar estado
         #DEBO PONERLE UNA COLA
         if(semaforo==tiempo):
+
+                if((len(trafficsignal)-1) <= _siguiente_):
+                        _siguiente_ = 0
+                else:
+                        _siguiente_ = _siguiente_ + 1
+                
                 #calcular nuevo tiempo y pasar nueva secuencia
 
                 #/////////////////////////////////////////////////////////
@@ -324,43 +328,48 @@ while traci.simulation.getMinExpectedNumber() > 0:
                         
                         if(carriles[0] is None):
                                 carriles[0] = ahora
+                                sem_1 = 0
                         else:
-                                espera = (ahora - carriles[0]).seconds
+                                espera = sem_1 #round((ahora - carriles[0]).total_seconds())
                                 carriles[0] = ahora
-
+                                sem_1 = 0
                                 print("######ESPERA#######")
                                 print(ahora)
                                 print(carriles[0])
                                 print("carril: " + str(_siguiente_) + " tiempo: " + str(espera))
                                 print("######ESPERA#######")
-
+                                
+                                
                 elif(_siguiente_ == 3):
                         #modificar el tiempo del carril 3
                         _trafico_ = porcentaje_2
                         if(carriles[1] is None):
+                                sem_2 = 0
                                 carriles[1] = ahora
                         else:
-                                espera = (ahora - carriles[1]).seconds
+                                espera = sem_2 #round((ahora - carriles[1]).total_seconds())
+                                sem_2 = 0
                                 carriles[1] = ahora
 
                                 print("######ESPERA#######")
                                 print(ahora)
-                                print(carriles[0])
+                                print(carriles[1])
                                 print("carril: " + str(_siguiente_) + " tiempo: " + str(espera))
                                 print("######ESPERA#######")
-                        
+                                
                 elif(_siguiente_ == 6):
                         #modificar el tiempo del carril 6
                         _trafico_ = porcentaje_3
                         if(carriles[2] is None):
+                                sem_3 = 0
                                 carriles[2] = ahora
                         else:
-                                espera = (ahora - carriles[2]).seconds
+                                espera = sem_3 #round((ahora - carriles[2]).total_seconds())
                                 carriles[2] = ahora
-
+                                sem_3 = 0
                                 print("######ESPERA#######")
                                 print(ahora)
-                                print(carriles[0])
+                                print(carriles[2])
                                 print("carril: " + str(_siguiente_) + " tiempo: " + str(espera))
                                 print("######ESPERA#######")
                                 
@@ -369,30 +378,33 @@ while traci.simulation.getMinExpectedNumber() > 0:
                         #modificar el tiempo del carril 9
                         _trafico_ = porcentaje_4
                         if(carriles[3] is None):
+                                sem_4 = 0
                                 carriles[3] = ahora
                         else:
-                                espera = (ahora - carriles[3]).seconds
+                                espera = sem_4 #round((ahora - carriles[3]).total_seconds())
                                 carriles[3] = ahora
-
+                                sem_4 = 0
                                 print("######ESPERA#######")
                                 print(ahora)
-                                print(carriles[0])
+                                print(carriles[3])
                                 print("carril: " + str(_siguiente_) + " tiempo: " + str(espera))
                                 print("######ESPERA#######")
-
-                
+                                                                
                 
                 ## CREAR FUZZY LOGIC
-                tiempo = fuzzy.inferencia(tiempo,20)
-                
-                print("*********************rules***************************")
-                print(str(tiempo))
-                
-                if((len(trafficsignal)-1) <= _siguiente_):
-                        _siguiente_ = 0
-                else:
-                        _siguiente_ = _siguiente_ + 1
+                if(_trafico_ != None):
+                        tiempo = fuzzy.inferencia(_trafico_,espera)
+
+                        #tiempo nuevo
+                        print("*********************rules***************************")
+                        print(str(tiempo))
+                        print(espera)
+                        print(_trafico_)
                         
+                        
+                else:
+                        tiempo = 10
+                                                
                 secuencia = trafficsignal[_siguiente_]
 
                 semaforo = 0                
@@ -401,12 +413,13 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 if("yyyyy" in secuencia or "rrrrrrrrrrrrrrrrrrrr" in secuencia):
                         tiempo = 5
 
-        #alguien que cuente y me diga cuando cambiar de secuencia con el tiempo mas reciente
-        traci.trafficlight.setPhaseDuration(tfl, tiempo)
-        traci.trafficlight.setRedYellowGreenState(tfl, secuencia)
-                
+        #alguien que cuente y me diga cuando cambiar de secuencia con el tiempo mas reciente        
         #conocer el siguiente estado
         semaforo = semaforo + 1
+        sem_1 = sem_1 + 1
+        sem_2 = sem_2 + 1
+        sem_3 = sem_3 + 1
+        sem_4 = sem_4 + 1
         
         ##---------------------------------------------------------------##
         ##----------CONTROL Traffic Lights----------##
@@ -414,14 +427,17 @@ while traci.simulation.getMinExpectedNumber() > 0:
         #***SET FUNCTION FOR TRAFFIC LIGHTS***
         #REF: https://sumo.dlr.de/docs/TraCI/Change_Traffic_Lights_State.html
 
+        traci.trafficlight.setPhaseDuration(tfl, tiempo)
+        traci.trafficlight.setRedYellowGreenState(tfl, secuencia)
+        
+        """
         trafficlightduration = tiempo
-
         print("##############################################")
         print(trafficsignal)
         print(traci.trafficlight.getPhaseDuration(tflight))
         print(trafficlightduration)
         print("##############################################")
-                
+        """     
         ##------------------------------------------------------##
         
 traci.close() #cerrar interfaz
