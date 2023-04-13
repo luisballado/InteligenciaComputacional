@@ -1,0 +1,173 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Lachaise Assignment
+% LaTeX Template
+% Version 1.0 (26/6/2018)
+%
+% This template originates from:
+% http://www.LaTeXTemplates.com
+%
+% Authors:
+% Marion Lachaise & François Févotte
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+% 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass{article}
+
+\input{structure.tex} % Include the file specifying the document structure and custom commands
+
+%----------------------------------------------------------------------------------------
+%	ASSIGNMENT INFORMATION
+%----------------------------------------------------------------------------------------
+
+\title{IC-2023: Proyecto} % Title of the assignment
+
+\author{Luis Ballado\\ \texttt{luis.ballado@cinvestav.mx}} % Author name and email address
+
+\date{CINVESTAV UNIDAD TAMAULIPAS --- \today} % University, school and/or department name(s) and a date
+
+%----------------------------------------------------------------------------------------
+\algnewcommand\algorithmicforeach{\textbf{for each}}
+\algdef{S}[FOR]{ForEach}[1]{\algorithmicforeach\ #1\ \algorithmicdo}
+
+\begin{document}
+
+\maketitle % Print the title
+
+%----------------------------------------------------------------------------------------
+%	INTRODUCTION
+%----------------------------------------------------------------------------------------
+
+\section{Instrucciones para ejecución}
+
+\begin{info} % Information block
+  Se adjunta la liga al repositorio, donde se encuentran los códigos\\
+  \href{https://github.com/luisballado/InteligenciaComputacional/tree/master/proyecto}{ver código en github}\\
+\end{info}
+
+\begin{info} % Information block
+  Se hacen uso de las siguientes bibliotecas de Python
+  \begin{itemize}
+  \item argparse - creación de banderas para alimentar el programa
+  \item \href{https://pypi.org/project/fuzzylogic/}{fuzzylogic}  - construcción de Lógica Borrosa
+  \item \href{https://pypi.org/project/traci/}{traci} - Interfaz de SUMO en su versión de python
+  \item \href{https://pypi.org/project/tabulate/}{tabulate} - generación de tablas en línea de comandos
+  \item \href{https://pypi.org/project/sumolib/}{sumolib} - Bibliotecas SUMO
+  \end{itemize}
+\end{info}
+
+\begin{enumerate} 
+
+\item \href{https://sumo.dlr.de/docs/Downloads.php}{Instalar Simulador SUMO} en una distro LINUX
+
+  \begin{commandline}
+    \begin{verbatim}
+      $ sudo add-apt-repository ppa:sumo/stable
+      $ sudo apt-get update
+      $ sudo apt-get install sumo sumo-tools sumo-doc
+    \end{verbatim}
+ \end{commandline}
+  
+\item Instalar dependencias con el archivo requirements.txt incluido en los archivos. (python >= 3)
+  \begin{commandline}
+ \begin{verbatim}
+  $ pip install -r requirements.txt
+  \end{verbatim}
+ \end{commandline}
+  
+\item Clonar el repositorio
+  
+\begin{commandline}
+ \begin{verbatim}
+  $ git clone https://github.com/luisballado/InteligenciaComputacional.git
+  $ cd InteligenciaComputacional
+  $ cd proyecto
+  $ cd fuzzy_semaphore
+ \end{verbatim}
+\end{commandline}
+
+\newpage
+\item Descripción Archivos \\
+
+  Dentro del repositorio se sigue la siguiente estructura para organizar los archivos del proyecto (archivos xml que definen los parámetros del mapa a construir en el simulador SUMO):\\
+  
+  \dirtree{%
+    .1 fuzzy\_semaphore/.
+    .2 logica\_borrosa.py.
+    .2 requirements.txt.
+    .2 sumo\_run.py.
+    .2 victoria\_cluster.add.xml.
+    .2 victoria\_cluster.net.xml.
+    .2 victoria\_cluster.net.xml.gz.
+    .2 victoria\_cluster.neteditcfg.
+    .2 victoria\_cluster.rou.xml.
+    .2 victoria\_cluster.sumocfg.
+    .2 victoria\_cluster\_ligero.rou.xml.
+    .2 victoria\_cluster\_medio.rou.xml.
+    .2 victoria\_cluster\_pesado.rou.xml.
+  }
+
+\end{enumerate} 
+
+\begin{itemize}
+\item \textbf{logica\_borrosa.py} - Clase Lógica Borrosa donde se hacen los cálculos
+\item \textbf{sumo\_run.py} - Programa principal para ejecutar el simulador con el mapa de CD. Victoria.
+\item \textbf{victoria\_cluster.\*} - Archivos generados por el Wizard al construir el mapa seleccionado
+\end{itemize}
+
+%---------------------------------------------------------------------
+
+\newpage
+\section{Valores de los Parámetros}
+
+En la ejecución del programa se incluyen banderas para su ejecución con Interfaz gráfica o no, y también la cantidad de trafico a generar.
+
+\begin{itemize}
+\item --show True ó --show False
+\item --traffic Bajo ó --traffic Medio ó --traffic Alto
+\end{itemize}
+
+Dependiendo de la versión de python en su máquina se correria de la siguiente forma:
+
+\begin{commandline}
+ \begin{verbatim}
+  $ python3 sumo_run.py --show True --traffic Bajo
+ \end{verbatim}
+\end{commandline}
+
+\subsection{Lógica Difusa}
+
+Se propone un control de lógica difusa para el control de los semaforos, partiendo de la premisa que podemos contar la cantidad de carros gracias al sensor lane area detector, así también contabilizar el tiempo de su última participación en el cluster.\\
+
+\subsubsection{Dominio}
+\begin{itemize}
+\item Trafico : [0 - 100]
+\item Tiempo  : [0 - 240]
+\item Tiempo Semaforo : [0 - 60]
+\end{itemize}
+\subsubsection{Conjuntos}
+\includegraphics[scale=0.6]{logica_difusa.png}
+
+%---------------------------------------------------------------------
+
+\newpage
+\section{Estadísticas}
+
+
+%---------------------------------------------------------------------
+\section{Referencias}
+
+\href{https://sumo.dlr.de/docs/Simulation/Traffic_Lights.html}{Traffic Lights Control}\\
+\href{https://pypi.org/project/traci/}{Interfaz SUMO-Python}\\
+\href{https://github.com/ethanpng2021/sumo-example/blob/main/2021-05-01-22-25-37/sumo_run.py}{Ejemplo Manejo Interfaz Python-SUMO}\\
+\href{https://sumo.dlr.de/docs/TraCI/Lane_Area_Detector_Value_Retrieval.html}{Lane Area Detector}\\
+\href{https://cst.fee.unicamp.br/sites/default/files/sumo/sumo-roadmap.pdf}{Tutorial SUMO - A Road Map SUMO}
+\end{document}
+
