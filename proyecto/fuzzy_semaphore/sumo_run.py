@@ -1,8 +1,6 @@
-import time, os
-import argparse, sys
-from datetime import datetime
-
-import random
+#import time, os
+import argparse
+#from datetime import datetime
 
 ############################################################
 #####################CORRER PROGRAMA########################
@@ -319,7 +317,7 @@ while traci.simulation.getMinExpectedNumber() > 0:
                 #/////////////////////////////////////////////////////////
 
                 espera = 0
-                ahora = datetime.now()
+                ahora = 0 #datetime.now()
                 
                 if(_siguiente_ == 0):
                         #modificar el tiempo del carril 0

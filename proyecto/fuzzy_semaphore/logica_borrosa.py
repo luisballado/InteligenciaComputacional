@@ -26,7 +26,7 @@ class LogicaBorrosa:
         self.espera.medio = triangular(60, 180)
         
         self.duracion.bajo  = S(10,20)
-        self.duracion.alto  = R(20,30)
+        self.duracion.alto  = R(20,40)
         self.duracion.medio = triangular(10, 30)
 
     #Reglas de Inferencia
