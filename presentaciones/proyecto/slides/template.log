@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.11.4)  25 APR 2023 23:45
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2022.11.4)  26 APR 2023 07:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1362,60 +1362,88 @@ Package pdftex.def Info: Images/sem_int.jpg  used on input line 306.
  [13
 
  <./Images/sem_int.jpg>]
-<Images/street_code.jpeg, id=403, 1371.1225pt x 914.41624pt>
+<Images/audi.jpg, id=403, 1027.84pt x 726.715pt>
+File: Images/audi.jpg Graphic file (type jpg)
+<use Images/audi.jpg>
+Package pdftex.def Info: Images/audi.jpg  used on input line 312.
+(pdftex.def)             Requested size: 273.83728pt x 193.6098pt.
+
+
+LaTeX Warning: Citation 'audi' on page 14 undefined on input line 312.
+
+[14
+
+ <./Images/audi.jpg>]
+<Images/street_code.jpeg, id=429, 1371.1225pt x 914.41624pt>
 File: Images/street_code.jpeg Graphic file (type jpg)
 <use Images/street_code.jpeg>
-Package pdftex.def Info: Images/street_code.jpeg  used on input line 315.
+Package pdftex.def Info: Images/street_code.jpeg  used on input line 321.
 (pdftex.def)             Requested size: 273.83728pt x 182.6149pt.
- [14
+ [15
 
- <./Images/street_code.jpeg>] [15
+ <./Images/street_code.jpeg>] [16
 
-] [16
+]
+<Images/control_systems.jpg, id=485, 2613.765pt x 1415.2875pt>
+File: Images/control_systems.jpg Graphic file (type jpg)
+<use Images/control_systems.jpg>
+Package pdftex.def Info: Images/control_systems.jpg  used on input line 342.
+(pdftex.def)             Requested size: 273.83728pt x 148.27484pt.
+
+
+LaTeX Warning: Citation 'autoevolucion' on page 17 undefined on input line 342.
+
+
+[17
+
+ <./Images/control_systems.jpg>] [18
 
 ]
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <10> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 365.
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 377.
 LaTeX Font Info:    Font shape `OT1/phv/m/it' in size <7> not available
-(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 365.
- [17
+(Font)              Font shape `OT1/phv/m/sl' tried instead on input line 377.
+ [19
 
 ]
-<Images/diagrama_sumo.png, id=509, 603.25375pt x 261.97874pt>
+<Images/diagrama_sumo.png, id=563, 603.25375pt x 261.97874pt>
 File: Images/diagrama_sumo.png Graphic file (type png)
 <use Images/diagrama_sumo.png>
-Package pdftex.def Info: Images/diagrama_sumo.png  used on input line 373.
+Package pdftex.def Info: Images/diagrama_sumo.png  used on input line 385.
 (pdftex.def)             Requested size: 308.06367pt x 133.78328pt.
- [18
+ [20
 
- <./Images/diagrama_sumo.png>]
-[19
+ <./Images/diagrama_sumo.png>] [21
 
 ]
-LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 3
-96.
+LaTeX Font Info:    Trying to load font information for OT1+pcr on input line 4
+10.
  (/usr/share/texlive/texmf-dist/tex/latex/psnfss/ot1pcr.fd
 File: ot1pcr.fd 2001/06/04 font definitions for OT1/pcr.
 )
-Overfull \hbox (110.91302pt too wide) in paragraph at lines 396--396
+Overfull \hbox (110.91302pt too wide) in paragraph at lines 410--410
 \OT1/pcr/m/n/10.95 ciudad-[]mexicana-[]trafico-[]no-[]cdmx-[]monterrey-[]10-[]c
 ongestionadas-[]mundo$[]\OT1/opensans-TLF/m/n/10.95 , 
  []
 
 
-Overfull \hbox (110.91302pt too wide) in paragraph at lines 396--396
+Overfull \hbox (110.91302pt too wide) in paragraph at lines 410--410
 \OT1/pcr/m/n/10.95 ciudad-[]mexicana-[]trafico-[]no-[]cdmx-[]monterrey-[]10-[]c
 ongestionadas-[]mundo$[]\OT1/opensans-TLF/m/n/10.95 , 
  []
 
 
-Overfull \hbox (356.50273pt too wide) in paragraph at lines 396--396
+Overfull \hbox (356.50273pt too wide) in paragraph at lines 410--410
 \OT1/pcr/m/n/10.95 gracias-[]a-[]la-[]inteligencia-[]artificial-[]este-[]semafo
 ro-[]se-[]activa-[]automaticamente-[]solo-[]cuando-[]es-[]necesario/$[]\OT1/ope
 nsans-TLF/m/n/10.95 , 
  []
 
-[20
+
+Overfull \vbox (114.77393pt too high) detected at line 410
+ []
+
+[22
 
 ]
 \tf@nav=\write7
@@ -1427,14 +1455,14 @@ nsans-TLF/m/n/10.95 ,
 \tf@snm=\write9
 \openout9 = `template.snm'.
 
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 398.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 398.
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 412.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 412.
  (./template.aux
 LaTeX Info: Redefining \. on input line 29.
 LaTeX Info: Redefining \% on input line 29.
 )
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 398.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 398.
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 412.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 412.
 Package rerunfilecheck Info: File `template.out' has not changed.
 (rerunfilecheck)             Checksum: EF51ACCB207DACA955561CD52B569CD5;247.
 
@@ -1454,10 +1482,10 @@ Package logreq Info: Writing requests to 'template.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 27336 strings out of 481239
- 520323 string characters out of 5920377
- 1161647 words of memory out of 5000000
- 41962 multiletter control sequences out of 15000+600000
+ 27361 strings out of 481239
+ 520747 string characters out of 5920377
+ 1163697 words of memory out of 5000000
+ 41979 multiletter control sequences out of 15000+600000
  556613 words of font info for 95 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  58i,15n,67p,813b,2334s stack positions out of 5000i,500n,10000p,200000b,80000s
@@ -1470,10 +1498,10 @@ ype1/ascender/opensans/OpenSans-Italic.pfb></usr/share/texlive/texmf-dist/fonts
 nts/type1/public/amsfonts/cm/cmss10.pfb></usr/share/texlive/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmsy10.pfb></usr/share/texlive/texmf-dist/fonts/type1/ur
 w/courier/ucrr8a.pfb>
-Output written on template.pdf (20 pages, 2104939 bytes).
+Output written on template.pdf (22 pages, 4477127 bytes).
 PDF statistics:
- 637 PDF objects out of 1000 (max. 8388607)
- 582 compressed objects within 6 object streams
- 50 named destinations out of 1000 (max. 500000)
- 133 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 700 PDF objects out of 1000 (max. 8388607)
+ 640 compressed objects within 7 object streams
+ 56 named destinations out of 1000 (max. 500000)
+ 143 words of extra memory for PDF output out of 10000 (max. 10000000)
 
